@@ -1,3 +1,3 @@
 all:
-	g++ -o prog ecc.cpp -g -lntl
+	g++ -o prog src/ecc.cpp -g -lntl
 
