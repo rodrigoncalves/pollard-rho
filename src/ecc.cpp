@@ -2,91 +2,12 @@
 #include <vector>
 #include <NTL/ZZ.h>
 
+#include "elliptic_curve.h"
+
 using namespace std;
 using namespace NTL;
 
 int A, B, p;
-
-int lambda(int yq, int yp, int xq, int xp)
-{
-    int a, b, d;
-    a = (yq - yp) % p;
-    if (a > p) a%=p;
-    b = xq - xp;
-
-    int aux;
-    a < 0 ? aux = -a : aux = a;
-    d = (int) GCD(aux, b);
-
-    a /= d; b /= d;
-    a = (a+p)%p;
-    if (a % b) 
-    {
-        b = (int) InvMod(b, p);
-        return a * b % p;
-    }
-
-    return a / b;
-}
-
-int lambda(int xp, int yp)
-{
-    int a, b, d;
-    a = (3*xp*xp + A);
-    if (a > p) a%=p;
-    b = 2*yp;
-
-    int aux;
-    a < 0 ? aux = -a : aux = a;
-    d = (int) GCD(aux, b);
-
-    a /= d; b /= d;
-    a = (a+p)%p;
-    if (a % b) 
-    {
-        b = (int) InvMod(b, p);
-        return a * b % p;
-    }
-
-    return a / b;
-}
-
-class Point
-{
-public:
-    int x; int y;
-
-    Point() : x(0), y(0) {}
-    Point(int _x, int _y) : x(_x), y(_y) {}
-
-    Point operator+(Point Q)
-    {
-        Point R;
-        int delta;
-
-        if (x == Q.x and y == Q.y) // if P == Q
-            delta = lambda(x, y);
-        else
-            delta = lambda(Q.y, y, Q.x, x);
-        
-        int kx = (delta * delta - x - Q.x) % p;
-        int ky = (delta * (x - kx) - y) % p;
-
-        R.x = kx<0 ? kx+p : kx;
-        R.y = ky<0 ? ky+p : ky;
-
-        return R;
-    }
-
-    Point operator*(int n)
-    {
-        Point P = Point(x, y);
-        for (int i=0; i<n-1; i++)
-            P = P + Point(x, y);
-
-        return P;
-    }
-};
 
 int main()
 {
@@ -95,11 +16,15 @@ int main()
     // int n = 41;
     // Point P = Point(30, 26);
     // Point Q = Point(35, 41);
+
     A = 1; B = 44;
     p = 229;
     int n = 239;
-    Point P = Point(5, 116);
-    Point Q = Point(155, 166);
+    // Point P = Point(5, 116);
+    // Point Q = Point(155, 166);
+    EllipticCurve E(p, A, B);
+    Point P = E.point(5, 116);
+    Point Q = E.point(155, 166);
 
     std::vector<Point> v;
     Point R = P; v.push_back(R);
@@ -111,7 +36,7 @@ int main()
     for (int i = 0; i < 100; ++i)
     {
         cout << i << " | a: " << a.back() << " | b: " << b.back();
-        int y = v.back().y;
+        int y = v.back().y();
         int o;
         if (y >= 0 and y < 15) {
             v.push_back(v.back() + Q);
@@ -131,12 +56,13 @@ int main()
             b.push_back(b.back());
             o=3;
         }
+// cout << "-----" << endl;
         // v.push_back(P*a.back() + Q*b.back());
         cout << " | S:" << o;
-        cout << "\t | (" << v[i].x << ", " << v[i].y << ")\n";
+        cout << "\t | (" << v[i].x() << ", " << v[i].y() << ")\n";
 
-        if (v[i].x == v[i/2].x and v[i].y == v[i/2].y and i > 2 and i%2 == 0) {
-            cout << "ACHOU! " << i << ": (" << v[i].x << ", " << v[i].y << ")\n";
+        if (v[i].x() == v[i/2].x() and v[i].y() == v[i/2].y() and i > 2 and i%2 == 0) {
+            cout << "ACHOU! " << i << ": (" << v[i].x() << ", " << v[i].y() << ")\n";
             am = a[i/2];
             an = a[i];
             bm = b[i/2];
@@ -157,12 +83,12 @@ int main()
 
     cout << "Resposta: " << (int) MulMod(an-am, x, n) << endl;
 
-    for (int i=0; i<v.size(); i++)
+    for (unsigned int i=0; i<v.size(); i++)
     {
-        // cout << i << ": (" << v[i].x << ", " << v[i].y << ")\n";
+        // cout << i << ": (" << v[i].x() << ", " << v[i].y() << ")\n";
 
     }
-    // cout << i << ": (" << R.x << ", " << R.y << ")\n";
+    // cout << i << ": (" << R.x() << ", " << R.y() << ")\n";
 
     return 0;
 }
