@@ -5,15 +5,20 @@ class EllipticCurve;
 
 class Point {
 public:
-    Point();
-    Point(EllipticCurve *curve, int x, int y);
     int x();
     int y();
 
     Point operator+(Point Q);
     Point operator*(int n);
 
+    friend class EllipticCurve;
+
+protected:
+    Point();
+
 private:
+    Point(EllipticCurve *curve, int x, int y);
+
     int lambda(int yq, int yp, int xq, int xp);
     int lambda(int xp, int yp);
 
