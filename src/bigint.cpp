@@ -5,7 +5,10 @@
  * Date: 30/10/2015
  * License: LGPL. No copyright.
  */
+#include <sstream>
 #include "bigint.h"
+
+using std::stringstream;
 
 int BigInt::m_conversionBase = DEFAULT_CONVERSION_BASE;
 
@@ -33,6 +36,45 @@ BigInt::BigInt(const int &value)
 {
     m_value = mpz_class(value);
 }
+
+BigInt BigInt::pow(const BigInt &e) const
+{
+    stringstream str;
+    str << e;
+    unsigned long ui;
+    str >> ui;
+    return pow(ui);
+}
+
+BigInt BigInt::pow(const unsigned long int &e) const
+{
+    mpz_t rop;
+    mpz_init(rop);
+    mpz_pow_ui(
+        rop,                    // result
+        m_value.get_mpz_t(),    // base
+        e                       // exp
+    );
+    BigInt res(rop);
+    mpz_clear(rop);
+    return res;
+}
+
+BigInt BigInt::pow_mod_p(const BigInt &e, const BigInt &p) const
+{
+    mpz_t rop;
+    mpz_init(rop);
+    mpz_powm_sec(
+          rop,                      // result
+          m_value.get_mpz_t(),      // base
+          e.m_value.get_mpz_t(),    // exponent
+          p.m_value.get_mpz_t()     // modulo
+    );
+    BigInt res(rop);
+    mpz_clear(rop);
+    return res;
+}
+
 
 BigInt BigInt::gcd(const BigInt &other) const
 {
