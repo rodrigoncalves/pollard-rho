@@ -8,7 +8,9 @@ public:
     int x() const;
     int y() const;
 
-    Point operator+(const Point &Q);
+    bool operator==(const Point &other) const;
+    bool operator!=(const Point &other) const;
+    Point operator+(const Point &other);
     Point operator*(const int n);
 
     friend class EllipticCurve;

@@ -62,18 +62,28 @@ Point::lambda(const int xp, const int yp) const
     return a / b;
 }
 
+bool
+Point::operator==(const Point &other) const {
+    return m_x == other.m_x and m_y == other.m_y;
+}
+
+bool
+Point::operator!=(const Point &other) const {
+    return m_x != other.m_x or m_y != other.m_y;
+}
+
 Point
-Point::operator+(const Point &Q)
+Point::operator+(const Point &other)
 {
     Point R;
     int delta;
 
-    if (m_x == Q.m_x and m_y == Q.m_y) // if P == Q
+    if (*this == other)
         delta = lambda(m_x, m_y);
     else
-        delta = lambda(Q.m_y, m_y, Q.m_x, m_x);
+        delta = lambda(other.m_y, m_y, other.m_x, m_x);
 
-    int kx = (delta * delta - m_x - Q.m_x) % m_curve->p();
+    int kx = (delta * delta - m_x - other.m_x) % m_curve->p();
     int ky = (delta * (m_x - kx) - m_y) % m_curve->p();
 
     R.m_curve = m_curve;
