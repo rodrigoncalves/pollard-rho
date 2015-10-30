@@ -1,6 +1,5 @@
 SRC_DIR = src
 OBJ_DIR = obj
-LIB_DIR = lib
 BIN_DIR = bin
 
 CC = g++
@@ -18,16 +17,16 @@ OBJ = ${addprefix $(OBJ_DIR)/, ${notdir ${SRC:.cpp=.o}}}
 .PHONY: clean depend
 
 all:
-	@mkdir -p $(OBJ_DIR) $(LIB_DIR) $(BIN_DIR)
-	$(MAKE) $(GAME)
+	@mkdir -p $(OBJ_DIR) $(BIN_DIR)
+	@$(MAKE) $(GAME)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 	@echo Building $@
-	$(CC) -c $(CFLAGS) $(INCLUDES) $< -o $@
+	@$(CC) -c $(CFLAGS) $(INCLUDES) $< -o $@
 
 $(GAME): $(OBJ)
 	@echo Building executable...
-	$(CC) $(CFLAGS) $(INCLUDES) -o $@ $(OBJ) $(LIBS)
+	@$(CC) $(CFLAGS) $(INCLUDES) -o $@ $(OBJ) $(LIBS)
 	@echo --- Done
 
 clean:
