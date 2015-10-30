@@ -23,16 +23,16 @@ BigInt
 Point::y() const { return m_y; }
 
 BigInt
-Point::lambda(const BigInt yq, const BigInt yp, const BigInt xq, const BigInt xp) const
+Point::lambda(const Point &P, const Point &Q) const
 {
     BigInt a, b, d;
-    a = (yq - yp) % m_curve->field();
+    a = (Q.y() - P.y()) % m_curve->field();
     if (a > m_curve->field())
     {
         a %= m_curve->field();
     }
 
-    b = xq - xp;
+    b = Q.x() - P.x();
 
     BigInt aux;
     a < 0 ? aux = -a : aux = a;
@@ -50,16 +50,16 @@ Point::lambda(const BigInt yq, const BigInt yp, const BigInt xq, const BigInt xp
 }
 
 BigInt
-Point::lambda(const BigInt xp, const BigInt yp) const
+Point::lambda(const Point &P) const
 {
     BigInt a, b, d;
-    a = (3*xp*xp + m_curve->A());
+    a = (3*P.x()*P.x() + m_curve->A());
     if (a > m_curve->field())
     {
         a %= m_curve->field();
     }
 
-    b = 2*yp;
+    b = 2*P.y();
 
     BigInt aux;
     a < 0 ? aux = -a : aux = a;
@@ -94,7 +94,7 @@ Point::operator+(const Point &other)
     Point R;
     BigInt delta;
 
-    delta = *this == other ? lambda(m_x, m_y) : delta = lambda(other.m_y, m_y, other.m_x, m_x);
+    delta = *this == other ? lambda(*this) : delta = lambda(*this, other);
 
     BigInt kx = (delta * delta - m_x - other.m_x) % m_curve->field();
     BigInt ky = (delta * (m_x - kx) - m_y) % m_curve->field();

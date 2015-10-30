@@ -35,8 +35,8 @@ private:
 
     Point(EllipticCurve *curve, const BigInt x, const BigInt y);
 
-    BigInt lambda(const BigInt yq, const BigInt yp, const BigInt xq, const BigInt xp) const;
-    BigInt lambda(const BigInt xp, const BigInt yp) const;
+    BigInt lambda(const Point &P, const Point &Q) const;
+    BigInt lambda(const Point &P) const;
 
 };
 
