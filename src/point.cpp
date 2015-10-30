@@ -107,7 +107,7 @@ Point::operator+(const Point &other)
 }
 
 Point
-Point::operator*(const BigInt n)
+Point::operator*(const BigInt &n)
 {
     Point P = *this;
     for (BigInt i=0; i<n-1; i++)

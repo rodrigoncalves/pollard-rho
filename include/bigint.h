@@ -11,7 +11,7 @@
 #include <gmp.h>
 #include <gmpxx.h>
 
-#define DEFAULT_CONVERSION_BASE 16
+#define DEFAULT_CONVERSION_BASE 10
 
 class BigInt
 {

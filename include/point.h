@@ -21,7 +21,7 @@ public:
     bool operator==(const Point &other) const;
     bool operator!=(const Point &other) const;
     Point operator+(const Point &other);
-    Point operator*(const BigInt n);
+    Point operator*(const BigInt &n);
 
     friend class EllipticCurve;
 

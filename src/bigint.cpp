@@ -37,7 +37,8 @@ BigInt::BigInt(const int &value)
     m_value = mpz_class(value);
 }
 
-BigInt BigInt::pow(const BigInt &e) const
+BigInt
+BigInt::pow(const BigInt &e) const
 {
     stringstream str;
     str << e;
@@ -46,7 +47,8 @@ BigInt BigInt::pow(const BigInt &e) const
     return pow(ui);
 }
 
-BigInt BigInt::pow(const unsigned long int &e) const
+BigInt
+BigInt::pow(const unsigned long int &e) const
 {
     mpz_t rop;
     mpz_init(rop);
@@ -60,7 +62,8 @@ BigInt BigInt::pow(const unsigned long int &e) const
     return res;
 }
 
-BigInt BigInt::pow_mod_p(const BigInt &e, const BigInt &p) const
+BigInt
+BigInt::pow_mod_p(const BigInt &e, const BigInt &p) const
 {
     mpz_t rop;
     mpz_init(rop);
@@ -76,7 +79,8 @@ BigInt BigInt::pow_mod_p(const BigInt &e, const BigInt &p) const
 }
 
 
-BigInt BigInt::gcd(const BigInt &other) const
+BigInt
+BigInt::gcd(const BigInt &other) const
 {
     mpz_t rop;
     mpz_init(rop);
@@ -86,7 +90,8 @@ BigInt BigInt::gcd(const BigInt &other) const
     return res;
 }
 
-BigInt BigInt::invMod(const BigInt &mod) const
+BigInt
+BigInt::invMod(const BigInt &mod) const
 {
     mpz_t rop;
     mpz_init(rop);
@@ -94,6 +99,37 @@ BigInt BigInt::invMod(const BigInt &mod) const
     BigInt res(rop);
     mpz_clear(rop);
     return res;
+}
+
+/* Assignments */
+BigInt& BigInt::operator=(const std::string &value)
+{
+    m_value = mpz_class(value, BigInt::m_conversionBase);
+    return *this;
+}
+
+BigInt& BigInt::operator=(const int &value)
+{
+    m_value = mpz_class(value);
+    return *this;
+}
+
+BigInt& BigInt::operator=(const unsigned int &value)
+{
+    m_value = mpz_class(value);
+    return *this;
+}
+
+BigInt& BigInt::operator=(const long &value)
+{
+    m_value = mpz_class(value);
+    return *this;
+}
+
+BigInt& BigInt::operator=(const unsigned long &value)
+{
+    m_value = mpz_class(value);
+    return *this;
 }
 
 bool operator==(const BigInt &a, const BigInt &b)

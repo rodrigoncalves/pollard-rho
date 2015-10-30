@@ -1,71 +1,97 @@
 #include <iostream>
 #include <vector>
 #include <NTL/ZZ.h>
-
 #include "elliptic_curve.h"
 
-using namespace std;
-using namespace NTL;
+// #define DEBUG
 
-int A, B, p;
+using namespace std;
+
+BigInt pollardRho(const EllipticCurve&, const Point&, const Point&);
 
 int main()
 {
-    // A = 34; B = 10;
-    // p = 47;
-    // int n = 41;
-    // EllipticCurve E(p, A, B);
-    // Point P = E.point(30, 26);
-    // Point Q = E.point(35, 41);
+    int p, A, B;
 
-    A = 1; B = 44;
-    p = 229;
-    int n = 239;
+    p = 47; A = 34; B = 10;
     EllipticCurve E(p, A, B);
-    Point P = E.point(5, 116);
-    Point Q = E.point(155, 166);
+    Point P = E.point(30, 26);
+    Point Q = E.point(35, 41);
+
+    // p = 229; A = 1; B = 44;
+    // EllipticCurve E(p, A, B);
+    // Point P = E.point(5, 116);
+    // Point Q = E.point(155, 166);
+
+    BigInt x = pollardRho(E, P, Q);
+    cout << "P = (" << P.x() << ", " << P.y() << ")\n";
+    cout << "Q = (" << Q.x() << ", " << Q.y() << ")\n";
+    cout << "x = " << x << endl;
+
+    return 0;
+}
+
+BigInt pollardRho(const EllipticCurve&, const Point &P, const Point &Q)
+{
+    int n = 41;
+    // int n = 239;
+    // int n = E.order();
 
     std::vector<Point> v;
-    Point R = P; v.push_back(R);
+    Point R = P;
+    v.push_back(R);
 
-    std::vector<int> a, b;
+    std::vector<BigInt> a, b;
     a.push_back(1);
     b.push_back(0);
-    int am, an, bm, bn;
+    BigInt am, an, bm, bn;
     for (int i = 0; i < 100; ++i)
     {
-        cout << i << " | a: " << a.back() << " | b: " << b.back();
+        #ifdef DEBUG
+            cout << i << " | a: " << a.back() << " | b: " << b.back();
+            int s;
+        #endif
+
         BigInt y = v.back().y();
-        int s;
         if (y >= 0 and y < 15)
         {
             v.push_back(v.back() + Q);
             a.push_back(a.back());
             b.push_back(b.back()+1);
-            s=1;
+            #ifdef DEBUG
+                s=1;
+            #endif
         }
         else if (y >= 15 and y < 30)
         {
             v.push_back(v.back()*2);
             a.push_back(2*a.back() % n);
             b.push_back(2*b.back() % n);
-            s=2;
+            #ifdef DEBUG
+                s=2;
+            #endif
         }
         else
         {
             v.push_back(v.back() + P);
             a.push_back(a.back()+1);
             b.push_back(b.back());
-            s=3;
+            #ifdef DEBUG
+                s=3;
+            #endif
         }
 
-        // v.push_back(P*a.back() + Q*b.back());
-        cout << " | S:" << s;
-        cout << "\t | (" << v[i].x() << ", " << v[i].y() << ")\n";
+        #ifdef DEBUG
+            cout << " | S:" << s;
+            cout << "\t | (" << v[i].x() << ", " << v[i].y() << ")\n";
+        #endif
 
         if (v[i].x() == v[i/2].x() and v[i].y() == v[i/2].y() and i > 2 and i%2 == 0)
         {
-            cout << "ACHOU! " << i << ": (" << v[i].x() << ", " << v[i].y() << ")\n";
+            #ifdef DEBUG
+                cout << "FOUND!\n" << i << ": (" << v[i].x() << ", " << v[i].y() << ")";
+                cout << " and " << i/2 << ": (" << v[i/2].x() << ", " << v[i/2].y() << ")\n";
+            #endif
             am = a[i/2];
             an = a[i];
             bm = b[i/2];
@@ -74,24 +100,8 @@ int main()
         }
     }
 
-    cout << "am: " << am << endl;
-    cout << "an: " << an << endl;
-    cout << "bm: " << bm << endl;
-    cout << "bn: " << bn << endl;
-
-    int x;
-    x = (int) InvMod((bm-bn), n);
-
-    cout << "(" << an << "-" << am << ")/(" << bm << "-" << bn << ")" << endl;
-
-    cout << "Resposta: " << (int) MulMod(an-am, x, n) << endl;
-
-    for (unsigned int i=0; i<v.size(); i++)
-    {
-        // cout << i << ": (" << v[i].x() << ", " << v[i].y() << ")\n";
-
-    }
-    // cout << i << ": (" << R.x() << ", " << R.y() << ")\n";
-
-    return 0;
+    BigInt c = an-am;
+    BigInt d = (bm-bn).invMod(n);
+    BigInt res = (c * d) % n;
+    return res < 0 ? res + n : res;
 }
