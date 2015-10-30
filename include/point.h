@@ -1,17 +1,19 @@
 #ifndef POINT_H
 #define POINT_H
 
+#include "bigint.h"
+
 class EllipticCurve;
 
 class Point {
 public:
-    int x() const;
-    int y() const;
+    BigInt x() const;
+    BigInt y() const;
 
     bool operator==(const Point &other) const;
     bool operator!=(const Point &other) const;
     Point operator+(const Point &other);
-    Point operator*(const int n);
+    Point operator*(const BigInt n);
 
     friend class EllipticCurve;
 
@@ -20,13 +22,13 @@ protected:
 
 private:
     EllipticCurve *m_curve;
-    int m_x;
-    int m_y;
+    BigInt m_x;
+    BigInt m_y;
 
-    Point(EllipticCurve *curve, const int x, const int y);
+    Point(EllipticCurve *curve, const BigInt x, const BigInt y);
 
-    int lambda(const int yq, const int yp, const int xq, const int xp) const;
-    int lambda(const int xp, const int yp) const;
+    BigInt lambda(const BigInt yq, const BigInt yp, const BigInt xq, const BigInt xp) const;
+    BigInt lambda(const BigInt xp, const BigInt yp) const;
 
 };
 

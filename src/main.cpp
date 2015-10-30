@@ -35,7 +35,7 @@ int main()
     for (int i = 0; i < 100; ++i)
     {
         cout << i << " | a: " << a.back() << " | b: " << b.back();
-        int y = v.back().y();
+        BigInt y = v.back().y();
         int s;
         if (y >= 0 and y < 15) {
             v.push_back(v.back() + Q);

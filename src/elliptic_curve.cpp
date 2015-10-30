@@ -1,20 +1,20 @@
 #include <stdexcept>
 #include "elliptic_curve.h"
 
-EllipticCurve::EllipticCurve(const int field, const int A, const int B)
+EllipticCurve::EllipticCurve(const BigInt field, const BigInt A, const BigInt B)
     : m_field(field), m_A(A), m_B(B) {}
 
-int
+BigInt
 EllipticCurve::field() const { return m_field; }
 
-int
+BigInt
 EllipticCurve::A() const { return m_A; }
 
-int
+BigInt
 EllipticCurve::B() const { return m_B; }
 
 Point
-EllipticCurve::point(const int x, const int y) {
+EllipticCurve::point(const BigInt x, const BigInt y) {
     if ((y * y) % m_field == (x*x*x + m_A*x + m_B) % m_field) {
         Point P(this, x, y);
         return P;

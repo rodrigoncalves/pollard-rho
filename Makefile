@@ -6,10 +6,10 @@ CC = g++
 
 CFLAGS = -W -Wall -pedantic -ansi -std=c++11 -MMD -g3
 INCLUDES = -Iinclude
-LIBS = -lntl
+LIBS = -lntl -lgmp -lgmpxx
 
-GAME = prog
-GAME_MAIN = $(SRC_DIR)/*.cpp
+TARGET = prog
+TARGET_MAIN = $(SRC_DIR)/*.cpp
 
 SRC = ${wildcard $(SRC_DIR)/*.cpp}
 OBJ = ${addprefix $(OBJ_DIR)/, ${notdir ${SRC:.cpp=.o}}} 
@@ -18,13 +18,13 @@ OBJ = ${addprefix $(OBJ_DIR)/, ${notdir ${SRC:.cpp=.o}}}
 
 all:
 	@mkdir -p $(OBJ_DIR) $(BIN_DIR)
-	@$(MAKE) $(GAME)
+	@$(MAKE) $(TARGET)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 	@echo Building $@
 	@$(CC) -c $(CFLAGS) $(INCLUDES) $< -o $@
 
-$(GAME): $(OBJ)
+$(TARGET): $(OBJ)
 	@$(CC) $(CFLAGS) $(INCLUDES) -o $@ $(OBJ) $(LIBS)
 	@echo --- Done
 
