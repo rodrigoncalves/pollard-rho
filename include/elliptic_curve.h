@@ -5,15 +5,15 @@
 
 class EllipticCurve {
 public:
-    EllipticCurve(const int p, const int A, const int B);
+    EllipticCurve(const int field, const int A, const int B);
 
+    int field() const;
     int A() const;
     int B() const;
-    int p() const;
     Point point(const int x, const int y);
 
 private:
-    int m_p;
+    int m_field;
     int m_A;
     int m_B;
     

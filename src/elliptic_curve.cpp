@@ -1,11 +1,11 @@
 #include <stdexcept>
 #include "elliptic_curve.h"
 
-EllipticCurve::EllipticCurve(const int p, const int A, const int B)
-    : m_p(p), m_A(A), m_B(B) {}
+EllipticCurve::EllipticCurve(const int field, const int A, const int B)
+    : m_field(field), m_A(A), m_B(B) {}
 
 int
-EllipticCurve::p() const { return m_p; }
+EllipticCurve::field() const { return m_field; }
 
 int
 EllipticCurve::A() const { return m_A; }
@@ -15,7 +15,7 @@ EllipticCurve::B() const { return m_B; }
 
 Point
 EllipticCurve::point(const int x, const int y) {
-    if ((y * y) % m_p == (x*x*x + m_A*x + m_B) % m_p) {
+    if ((y * y) % m_field == (x*x*x + m_A*x + m_B) % m_field) {
         Point P(this, x, y);
         return P;
     } else {
