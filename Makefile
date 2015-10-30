@@ -8,7 +8,7 @@ CFLAGS = -W -Wall -pedantic -ansi -std=c++11 -MMD -g3
 INCLUDES = -Iinclude
 LIBS = -lntl -lgmp -lgmpxx
 
-TARGET = prog
+TARGET = bin/pollardrho
 TARGET_MAIN = $(SRC_DIR)/*.cpp
 
 SRC = ${wildcard $(SRC_DIR)/*.cpp}
