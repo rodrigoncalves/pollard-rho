@@ -5,11 +5,11 @@ class EllipticCurve;
 
 class Point {
 public:
-    int x();
-    int y();
+    int x() const;
+    int y() const;
 
-    Point operator+(Point Q);
-    Point operator*(int n);
+    Point operator+(const Point &Q);
+    Point operator*(const int n);
 
     friend class EllipticCurve;
 
@@ -17,10 +17,10 @@ protected:
     Point();
 
 private:
-    Point(EllipticCurve *curve, int x, int y);
+    Point(EllipticCurve *curve, const int x, const int y);
 
-    int lambda(int yq, int yp, int xq, int xp);
-    int lambda(int xp, int yp);
+    int lambda(const int yq, const int yp, const int xq, const int xp) const;
+    int lambda(const int xp, const int yp) const;
 
     EllipticCurve *m_curve;
     int m_x;
@@ -29,12 +29,12 @@ private:
 
 class EllipticCurve {
 public:
-    EllipticCurve(int p, int A, int B);
+    EllipticCurve(const int p, const int A, const int B);
 
-    int A();
-    int B();
-    int p();
-    Point point(int x, int y);
+    int A() const;
+    int B() const;
+    int p() const;
+    Point point(const int x, const int y);
 
 private:
     int m_p;
