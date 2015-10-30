@@ -37,19 +37,22 @@ int main()
         cout << i << " | a: " << a.back() << " | b: " << b.back();
         BigInt y = v.back().y();
         int s;
-        if (y >= 0 and y < 15) {
+        if (y >= 0 and y < 15)
+        {
             v.push_back(v.back() + Q);
             a.push_back(a.back());
             b.push_back(b.back()+1);
             s=1;
         }
-        else if (y >= 15 and y < 30) {
+        else if (y >= 15 and y < 30)
+        {
             v.push_back(v.back()*2);
             a.push_back(2*a.back() % n);
             b.push_back(2*b.back() % n);
             s=2;
         }
-        else {
+        else
+        {
             v.push_back(v.back() + P);
             a.push_back(a.back()+1);
             b.push_back(b.back());
@@ -60,7 +63,8 @@ int main()
         cout << " | S:" << s;
         cout << "\t | (" << v[i].x() << ", " << v[i].y() << ")\n";
 
-        if (v[i].x() == v[i/2].x() and v[i].y() == v[i/2].y() and i > 2 and i%2 == 0) {
+        if (v[i].x() == v[i/2].x() and v[i].y() == v[i/2].y() and i > 2 and i%2 == 0)
+        {
             cout << "ACHOU! " << i << ": (" << v[i].x() << ", " << v[i].y() << ")\n";
             am = a[i/2];
             an = a[i];

@@ -1,3 +1,10 @@
+/*
+ * Elliptic Curve class implementation
+ *
+ * Author: Rodrigo
+ * Date: 29/10/2015
+ * License: LGPL. No copyright.
+ */
 #include <stdexcept>
 #include "elliptic_curve.h"
 
@@ -14,11 +21,15 @@ BigInt
 EllipticCurve::B() const { return m_B; }
 
 Point
-EllipticCurve::point(const BigInt x, const BigInt y) {
-    if ((y * y) % m_field == (x*x*x + m_A*x + m_B) % m_field) {
+EllipticCurve::point(const BigInt x, const BigInt y)
+{
+    if ((y * y) % m_field == (x*x*x + m_A*x + m_B) % m_field)
+    {
         Point P(this, x, y);
         return P;
-    } else {
+    }
+    else
+    {
         throw std::invalid_argument("Point does not belong to curve");
     }
 }

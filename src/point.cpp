@@ -1,3 +1,10 @@
+/*
+ * Point class implementation
+ *
+ * Author: Rodrigo
+ * Date: 29/10/2015
+ * License: LGPL. No copyright.
+ */
 #include <NTL/ZZ.h>
 #include "point.h"
 #include "elliptic_curve.h"
@@ -20,7 +27,11 @@ Point::lambda(const BigInt yq, const BigInt yp, const BigInt xq, const BigInt xp
 {
     BigInt a, b, d;
     a = (yq - yp) % m_curve->field();
-    if (a > m_curve->field()) a %= m_curve->field();
+    if (a > m_curve->field())
+    {
+        a %= m_curve->field();
+    }
+
     b = xq - xp;
 
     BigInt aux;
@@ -43,7 +54,11 @@ Point::lambda(const BigInt xp, const BigInt yp) const
 {
     BigInt a, b, d;
     a = (3*xp*xp + m_curve->A());
-    if (a > m_curve->field()) a %= m_curve->field();
+    if (a > m_curve->field())
+    {
+        a %= m_curve->field();
+    }
+
     b = 2*yp;
 
     BigInt aux;
@@ -62,12 +77,14 @@ Point::lambda(const BigInt xp, const BigInt yp) const
 }
 
 bool
-Point::operator==(const Point &other) const {
+Point::operator==(const Point &other) const
+{
     return m_x == other.m_x and m_y == other.m_y;
 }
 
 bool
-Point::operator!=(const Point &other) const {
+Point::operator!=(const Point &other) const
+{
     return m_x != other.m_x or m_y != other.m_y;
 }
 
@@ -77,10 +94,7 @@ Point::operator+(const Point &other)
     Point R;
     BigInt delta;
 
-    if (*this == other)
-        delta = lambda(m_x, m_y);
-    else
-        delta = lambda(other.m_y, m_y, other.m_x, m_x);
+    delta = *this == other ? lambda(m_x, m_y) : delta = lambda(other.m_y, m_y, other.m_x, m_x);
 
     BigInt kx = (delta * delta - m_x - other.m_x) % m_curve->field();
     BigInt ky = (delta * (m_x - kx) - m_y) % m_curve->field();
@@ -97,7 +111,9 @@ Point::operator*(const BigInt n)
 {
     Point P = *this;
     for (BigInt i=0; i<n-1; i++)
+    {
         P = P + *this;
+    }
 
     return P;
 }

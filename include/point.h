@@ -1,3 +1,10 @@
+/*
+ * Class that represents a Point
+ *
+ * Author: Rodrigo
+ * Date: 29/10/2015
+ * License: LGPL. No copyright.
+ */
 #ifndef POINT_H
 #define POINT_H
 
@@ -5,7 +12,8 @@
 
 class EllipticCurve;
 
-class Point {
+class Point
+{
 public:
     BigInt x() const;
     BigInt y() const;

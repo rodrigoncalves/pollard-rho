@@ -1,3 +1,10 @@
+/*
+ * Class that represents a Big Integer
+ *
+ * Author: Rodrigo
+ * Date: 30/10/2015
+ * License: LGPL. No copyright.
+ */
 #ifndef BIGINT_H
 #define BIGINT_H
 
@@ -6,7 +13,8 @@
 
 #define DEFAULT_CONVERSION_BASE 16
 
-class BigInt {
+class BigInt
+{
 public:
     BigInt();
     BigInt(const mpz_class &value);
@@ -14,8 +22,8 @@ public:
     BigInt(const BigInt &value);
     BigInt(const int &value);
 
-	BigInt gcd(const BigInt &other) const;
-	BigInt invMod(const BigInt &mod) const;
+    BigInt gcd(const BigInt &other) const;
+    BigInt invMod(const BigInt &mod) const;
 
     BigInt& operator=(const std::string &value);
     BigInt& operator=(const int &value);
