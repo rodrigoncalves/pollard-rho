@@ -55,7 +55,7 @@ int main()
             b.push_back(b.back());
             s=3;
         }
-// cout << "-----" << endl;
+
         // v.push_back(P*a.back() + Q*b.back());
         cout << " | S:" << s;
         cout << "\t | (" << v[i].x() << ", " << v[i].y() << ")\n";
