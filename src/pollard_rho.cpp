@@ -17,8 +17,9 @@ using namespace std;
 
 BigInt pollardRho(const EllipticCurve&, const Point &P, const Point &Q)
 {
-    int n = 41;
+    // int n = 41;
     // int n = 239;
+    int n = 7889;
     // int n = E.order();
 
     std::vector<Point> v;
@@ -29,7 +30,9 @@ BigInt pollardRho(const EllipticCurve&, const Point &P, const Point &Q)
     a.push_back(1);
     b.push_back(0);
     BigInt am, an, bm, bn;
-    for (int i = 0; i < 100; ++i)
+    unsigned long i = 0;
+
+    while (1)
     {
         #ifdef DEBUG
             cout << i << " | a: " << a.back() << " | b: " << b.back();
@@ -82,6 +85,8 @@ BigInt pollardRho(const EllipticCurve&, const Point &P, const Point &Q)
             bn = b[i];
             break;
         }
+
+        i++;
     }
 
     BigInt c = an-am;
