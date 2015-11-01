@@ -16,6 +16,9 @@ Point::Point() : m_curve(nullptr), m_x(0), m_y(0) {}
 Point::Point(EllipticCurve *curve, const BigInt x, const BigInt y)
     : m_curve(curve), m_x(x), m_y(y) {}
 
+bool
+Point::isInfinite() const { return false; }
+
 BigInt
 Point::x() const { return m_x; }
 
@@ -89,7 +92,7 @@ Point::operator!=(const Point &other) const
 }
 
 Point
-Point::operator+(const Point &other)
+Point::operator+(const Point &other) const
 {
     Point R;
     BigInt delta;
@@ -107,7 +110,10 @@ Point::operator+(const Point &other)
 }
 
 Point
-Point::operator*(const BigInt &n)
+Point::operator-() const { return Point(m_curve, m_x, -m_y); }
+
+Point
+Point::operator*(const BigInt &n) const
 {
     Point P = *this;
     for (BigInt i=0; i<n-1; i++)

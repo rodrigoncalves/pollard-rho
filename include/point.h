@@ -15,13 +15,15 @@ class EllipticCurve;
 class Point
 {
 public:
+    bool isInfinite() const;
     BigInt x() const;
     BigInt y() const;
 
     bool operator==(const Point &other) const;
     bool operator!=(const Point &other) const;
-    Point operator+(const Point &other);
-    Point operator*(const BigInt &n);
+    Point operator+(const Point &other) const;
+    Point operator*(const BigInt &n) const;
+    Point operator-() const;
 
     friend class EllipticCurve;
 
