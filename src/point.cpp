@@ -5,11 +5,8 @@
  * Date: 29/10/2015
  * License: LGPL. No copyright.
  */
-#include <NTL/ZZ.h>
 #include "point.h"
 #include "elliptic_curve.h"
-
-using namespace NTL;
 
 Point::Point() : m_curve(nullptr), m_x(0), m_y(0) {}
 
@@ -92,6 +89,12 @@ Point::operator!=(const Point &other) const
 }
 
 Point
+Point::operator+=(const Point &other)
+{
+    return *this = *this + other;
+}
+
+Point
 Point::operator+(const Point &other) const
 {
     Point R;
@@ -118,7 +121,7 @@ Point::operator*(const BigInt &n) const
     Point P = *this;
     for (BigInt i=0; i<n-1; i++)
     {
-        P = P + *this;
+        P += *this;
     }
 
     return P;

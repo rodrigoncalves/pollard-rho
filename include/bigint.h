@@ -22,9 +22,9 @@ public:
     BigInt(const BigInt &value);
     BigInt(const int &value);
 
-    BigInt pow(const BigInt &e) const;
-    BigInt pow(const unsigned long int &e) const;
-    BigInt pow_mod_p(const BigInt &e, const BigInt &p) const;
+    BigInt power(const BigInt &e) const;
+    BigInt power(const unsigned long int &e) const;
+    BigInt powerMod(const BigInt &e, const BigInt &p) const;
     BigInt gcd(const BigInt &other) const;
     BigInt invMod(const BigInt &mod) const;
 

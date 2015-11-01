@@ -38,17 +38,17 @@ BigInt::BigInt(const int &value)
 }
 
 BigInt
-BigInt::pow(const BigInt &e) const
+BigInt::power(const BigInt &e) const
 {
     stringstream str;
     str << e;
     unsigned long ui;
     str >> ui;
-    return pow(ui);
+    return power(ui);
 }
 
 BigInt
-BigInt::pow(const unsigned long int &e) const
+BigInt::power(const unsigned long int &e) const
 {
     mpz_t rop;
     mpz_init(rop);
@@ -63,7 +63,7 @@ BigInt::pow(const unsigned long int &e) const
 }
 
 BigInt
-BigInt::pow_mod_p(const BigInt &e, const BigInt &p) const
+BigInt::powerMod(const BigInt &e, const BigInt &p) const
 {
     mpz_t rop;
     mpz_init(rop);
