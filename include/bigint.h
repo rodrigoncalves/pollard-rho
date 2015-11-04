@@ -75,7 +75,6 @@ public:
 protected:
     mpz_class m_value;
     static int m_conversionBase;
-    
 };
 
 #endif

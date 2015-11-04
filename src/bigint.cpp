@@ -171,7 +171,7 @@ bool operator<(const BigInt &a, const BigInt &b)
 bool operator<=(const BigInt &a, const BigInt &b)
 {
     int res = mpz_cmp(a.m_value.get_mpz_t(), b.m_value.get_mpz_t());
-    return res >= 0;
+    return res <= 0;
 }
 
 BigInt operator+(const BigInt &a, const BigInt &b)

@@ -8,7 +8,7 @@
 #include <stdexcept>
 #include "elliptic_curve.h"
 
-EllipticCurve::EllipticCurve(const BigInt field, const BigInt A, const BigInt B)
+EllipticCurve::EllipticCurve(const BigInt &field, const BigInt &A, const BigInt &B)
     : m_field(field), m_A(A), m_B(B) {}
 
 BigInt
@@ -21,7 +21,7 @@ BigInt
 EllipticCurve::B() const { return m_B; }
 
 Point
-EllipticCurve::point(const BigInt x, const BigInt y)
+EllipticCurve::point(const BigInt &x, const BigInt &y)
 {
     if ((y * y) % m_field == (x*x*x + m_A*x + m_B) % m_field)
     {
@@ -32,4 +32,23 @@ EllipticCurve::point(const BigInt x, const BigInt y)
     {
         throw std::invalid_argument("Point does not belong to curve");
     }
+}
+
+BigInt
+EllipticCurve::order()
+{
+    BigInt n = 0;
+    for (BigInt x = 0; x < m_field; ++x)
+    {
+        for (BigInt y = 0; y < m_field; ++y)
+        {
+            try
+            {
+                point(x, y);
+                ++n;
+            } catch (std::invalid_argument) {}
+        }
+    }
+
+    return n;
 }

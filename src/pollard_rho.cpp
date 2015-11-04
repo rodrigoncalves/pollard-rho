@@ -8,19 +8,21 @@
 #include <iostream>
 #include <vector>
 #include "bigint.h"
+#include "elliptic_curve.h"
 #include "point.h"
 #include "pollard_rho.h"
 
-// #define DEBUG
+#define DEBUG
 
 using namespace std;
 
-BigInt pollardRho(const EllipticCurve&, const Point &P, const Point &Q)
+BigInt pollardRho(EllipticCurve &E, const Point &P, const Point &Q)
 {
-    // int n = 41;
-    // int n = 239;
-    int n = 7889;
-    // int n = E.order();
+    BigInt n;
+    // n = 41;
+    // n = 239;
+    n = 7889;
+    // n = E.order()+1;
 
     std::vector<Point> v;
     Point R = P;

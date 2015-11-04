@@ -40,7 +40,6 @@ private:
 
     BigInt lambda(const Point &P, const Point &Q) const;
     BigInt lambda(const Point &P) const;
-
 };
 
 #endif

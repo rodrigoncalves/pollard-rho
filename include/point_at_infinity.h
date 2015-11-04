@@ -22,7 +22,6 @@ public:
     Point operator*(const BigInt &n) const;
     Point operator-(const Point &P) const;
     PointAtInfinity operator-() const;
-    
 };
 
 #endif
