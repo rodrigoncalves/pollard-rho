@@ -98,6 +98,11 @@ BigInt::invMod(const BigInt &mod) const
     mpz_invert(rop, m_value.get_mpz_t(), mod.m_value.get_mpz_t());
     BigInt res(rop);
     mpz_clear(rop);
+    if (res == 0)
+    {
+        throw std::invalid_argument("Inverse doesn't exist");
+    }
+
     return res;
 }
 
