@@ -1,22 +1,22 @@
 /*
- * Implementation of Pollard's Rho algorithms
+ * Implementation of Pollard's rho algorithm (Original)
  *
  * Author: Rodrigo
  * Date: 31/10/2015
  * License: LGPL. No copyright.
  */
-#include <iostream>
-#include <vector>
 #include "bigint.h"
 #include "elliptic_curve.h"
 #include "point.h"
 #include "pollard_rho.h"
+#include <iostream>
+#include <vector>
 
 // #define DEBUG
 
 using namespace std;
 
-BigInt pollardRho(EllipticCurve &E, const Point &P, const Point &Q)
+BigInt pollardRhoOriginal(EllipticCurve &E, const Point &P, const Point &Q)
 {
     BigInt n = E.order();
 

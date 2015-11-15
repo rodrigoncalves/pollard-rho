@@ -1,5 +1,5 @@
 /*
- * Pollard's Rho algorithms
+ * Pollard's rho algorithms
  *
  * Author: Rodrigo
  * Date: 31/10/2015
@@ -8,6 +8,6 @@
 #ifndef POLLARD_RHO_H
 #define POLLARD_RHO_H
 
-extern BigInt pollardRho(EllipticCurve &E, const Point &P, const Point &Q);
+extern BigInt pollardRhoOriginal(EllipticCurve &E, const Point &P, const Point &Q);
 
 #endif
