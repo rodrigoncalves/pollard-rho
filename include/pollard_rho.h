@@ -8,6 +8,6 @@
 #ifndef POLLARD_RHO_H
 #define POLLARD_RHO_H
 
-extern BigInt pollardRhoOriginal(EllipticCurve &E, const Point &P, const Point &Q);
+extern BigInt pollardRho_original(EllipticCurve &E, const Point &P, const Point &Q);
 
 #endif

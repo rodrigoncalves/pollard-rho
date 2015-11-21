@@ -23,7 +23,7 @@ int main()
     Point P = E.point(4023, 6036);
     Point Q = E.point(4135, 3169);
 
-    BigInt x = pollardRhoOriginal(E, P, Q);
+    BigInt x = pollardRho_original(E, P, Q);
     cout << "P = (" << P.x() << ", " << P.y() << ")\n";
     cout << "Q = (" << Q.x() << ", " << Q.y() << ")\n";
     cout << "x = " << x << endl;

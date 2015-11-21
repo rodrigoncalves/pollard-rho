@@ -16,7 +16,7 @@
 
 using namespace std;
 
-BigInt pollardRhoOriginal(EllipticCurve &E, const Point &P, const Point &Q)
+BigInt pollardRho_original(EllipticCurve &E, const Point &P, const Point &Q)
 {
     BigInt n = E.order();
 
