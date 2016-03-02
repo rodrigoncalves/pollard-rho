@@ -5,32 +5,32 @@
  * Date: 31/10/2015
  * License: LGPL. No copyright.
  */
+#include <iostream>
+#include <vector>
 #include "bigint.h"
 #include "elliptic_curve.h"
 #include "point.h"
 #include "pollard_rho.h"
-#include <iostream>
-#include <vector>
 
 // #define DEBUG
 
 using namespace std;
 
-BigInt pollardRho_original(EllipticCurve &E, const Point &P, const Point &Q)
+BigInt
+PollardRho::original(EllipticCurve &E, const Point &P, const Point &Q)
 {
-    BigInt n = E.order();
-
-    std::vector<Point> v;
-    Point R = P;
-    v.push_back(R);
-
+    BigInt n, am, an, bm, bn;
     vector<BigInt> a, b;
+    vector<Point> v;
+    unsigned long i = 0;
+    Point R = P;
+
+    n = E.order();
+    v.push_back(R);
     a.push_back(1);
     b.push_back(0);
-    BigInt am, an, bm, bn;
-    unsigned long i = 0;
 
-    while (1)
+    while (++i)
     {
         #ifdef DEBUG
             cout << i << " | a: " << a.back() << " | b: " << b.back();
@@ -71,7 +71,9 @@ BigInt pollardRho_original(EllipticCurve &E, const Point &P, const Point &Q)
             cout << "\t | (" << v[i].x() << ", " << v[i].y() << ")\n";
         #endif
 
-        if (v[i].x() == v[i/2].x() and v[i].y() == v[i/2].y() and i > 2 and i%2 == 0)
+        if (v[i].x() == v[i/2].x() and
+            v[i].y() == v[i/2].y() and
+            i > 2 and i % 2 == 0)
         {
             #ifdef DEBUG
                 cout << "FOUND!\n" << i << ": (" << v[i].x() << ", " << v[i].y() << ")";
@@ -83,12 +85,10 @@ BigInt pollardRho_original(EllipticCurve &E, const Point &P, const Point &Q)
             bn = b[i];
             break;
         }
-
-        i++;
     }
 
     BigInt c = an-am;
     BigInt d = (bm-bn).invMod(n);
-    BigInt res = (c * d) % n;
-    return res < 0 ? res + n : res;
+    BigInt ret = (c * d) % n;
+    return ret < 0 ? ret + n : ret;
 }

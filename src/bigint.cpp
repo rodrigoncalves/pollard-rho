@@ -57,9 +57,9 @@ BigInt::power(const unsigned long int &e) const
         m_value.get_mpz_t(),    // base
         e                       // exp
     );
-    BigInt res(rop);
+    BigInt ret(rop);
     mpz_clear(rop);
-    return res;
+    return ret;
 }
 
 BigInt
@@ -73,9 +73,9 @@ BigInt::powerMod(const BigInt &e, const BigInt &p) const
           e.m_value.get_mpz_t(),    // exponent
           p.m_value.get_mpz_t()     // modulo
     );
-    BigInt res(rop);
+    BigInt ret(rop);
     mpz_clear(rop);
-    return res;
+    return ret;
 }
 
 
@@ -85,9 +85,9 @@ BigInt::gcd(const BigInt &other) const
     mpz_t rop;
     mpz_init(rop);
     mpz_gcd(rop, m_value.get_mpz_t(), other.m_value.get_mpz_t());
-    BigInt res(rop);
+    BigInt ret(rop);
     mpz_clear(rop);
-    return res;
+    return ret;
 }
 
 BigInt
@@ -96,14 +96,14 @@ BigInt::invMod(const BigInt &mod) const
     mpz_t rop;
     mpz_init(rop);
     mpz_invert(rop, m_value.get_mpz_t(), mod.m_value.get_mpz_t());
-    BigInt res(rop);
+    BigInt ret(rop);
     mpz_clear(rop);
-    if (res == 0)
+    if (ret == 0)
     {
         throw std::invalid_argument("Inverse doesn't exist");
     }
 
-    return res;
+    return ret;
 }
 
 /* Assignments */
@@ -139,44 +139,44 @@ BigInt& BigInt::operator=(const unsigned long &value)
 
 bool operator==(const BigInt &a, const BigInt &b)
 {
-    int res = mpz_cmp(a.m_value.get_mpz_t(), b.m_value.get_mpz_t());
-    return res == 0;
+    int ret = mpz_cmp(a.m_value.get_mpz_t(), b.m_value.get_mpz_t());
+    return ret == 0;
 }
 
 bool operator==(const BigInt &a, const long int &b)
 {
-    int res = mpz_cmp_si(a.m_value.get_mpz_t(), b);
-    return res == 0;
+    int ret = mpz_cmp_si(a.m_value.get_mpz_t(), b);
+    return ret == 0;
 }
 
 bool operator!=(const BigInt &a, const BigInt &b)
 {
-    int res = mpz_cmp(a.m_value.get_mpz_t(), b.m_value.get_mpz_t());
-    return res != 0;
+    int ret = mpz_cmp(a.m_value.get_mpz_t(), b.m_value.get_mpz_t());
+    return ret != 0;
 }
 
 bool operator>=(const BigInt &a, const BigInt &b)
 {
-    int res = mpz_cmp(a.m_value.get_mpz_t(), b.m_value.get_mpz_t());
-    return res >= 0;
+    int ret = mpz_cmp(a.m_value.get_mpz_t(), b.m_value.get_mpz_t());
+    return ret >= 0;
 }
 
 bool operator>(const BigInt &a, const BigInt &b)
 {
-    int res = mpz_cmp(a.m_value.get_mpz_t(), b.m_value.get_mpz_t());
-    return res > 0;
+    int ret = mpz_cmp(a.m_value.get_mpz_t(), b.m_value.get_mpz_t());
+    return ret > 0;
 }
 
 bool operator<(const BigInt &a, const BigInt &b)
 {
-    int res = mpz_cmp(a.m_value.get_mpz_t(), b.m_value.get_mpz_t());
-    return res < 0;
+    int ret = mpz_cmp(a.m_value.get_mpz_t(), b.m_value.get_mpz_t());
+    return ret < 0;
 }
 
 bool operator<=(const BigInt &a, const BigInt &b)
 {
-    int res = mpz_cmp(a.m_value.get_mpz_t(), b.m_value.get_mpz_t());
-    return res <= 0;
+    int ret = mpz_cmp(a.m_value.get_mpz_t(), b.m_value.get_mpz_t());
+    return ret <= 0;
 }
 
 BigInt operator+(const BigInt &a, const BigInt &b)
@@ -242,14 +242,14 @@ BigInt operator/(const BigInt &a, const long &b)
 
 BigInt operator%(const BigInt &a, const BigInt &b)
 {
-    BigInt res(a.m_value % b.m_value);
-    return res;
+    BigInt ret(a.m_value % b.m_value);
+    return ret;
 }
 
 BigInt operator%(const BigInt &a, const long &b)
 {
-    BigInt res(a.m_value % b);
-    return res;
+    BigInt ret(a.m_value % b);
+    return ret;
 }
 
 BigInt& operator+=(BigInt &a, const BigInt &b)
