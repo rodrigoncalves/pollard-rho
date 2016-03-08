@@ -27,6 +27,7 @@ public:
     BigInt powerMod(const BigInt &e, const BigInt &p) const;
     BigInt gcd(const BigInt &other) const;
     BigInt invMod(const BigInt &mod) const;
+    BigInt randomBigInt(const BigInt &max) const;
 
     BigInt& operator=(const std::string &value);
     BigInt& operator=(const int &value);

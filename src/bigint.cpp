@@ -106,6 +106,29 @@ BigInt::invMod(const BigInt &mod) const
     return ret;
 }
 
+BigInt
+BigInt::randomBigInt(const BigInt &max) const
+{
+	mpz_t rop, maxz;
+	gmp_randstate_t state;
+	int seed;
+
+	mpz_init(rop);
+	mpz_init(maxz);
+	mpz_set(maxz,max.m_value.get_mpz_t());
+	srand(time(NULL));
+	seed = rand();
+	gmp_randinit_mt(state);
+	gmp_randseed_ui(state, seed);
+
+	mpz_urandomm(rop, state, maxz);
+	BigInt ret(rop);
+	mpz_clear(rop);
+	mpz_clear(maxz);
+
+	return ret;
+}
+
 /* Assignments */
 BigInt& BigInt::operator=(const std::string &value)
 {
