@@ -27,7 +27,9 @@ public:
     BigInt powerMod(const BigInt &e, const BigInt &p) const;
     BigInt gcd(const BigInt &other) const;
     BigInt invMod(const BigInt &mod) const;
-    BigInt randomBigInt(const BigInt &max) const;
+
+    /* static function */
+    static BigInt random(const BigInt &max);
 
     BigInt& operator=(const std::string &value);
     BigInt& operator=(const int &value);
@@ -71,6 +73,7 @@ public:
     friend BigInt& operator--(BigInt &a);
     friend BigInt operator--(BigInt &a, int dummy);
 
+    /* static function */
     friend std::ostream& operator<<(std::ostream &os, const BigInt &val);
 
 protected:

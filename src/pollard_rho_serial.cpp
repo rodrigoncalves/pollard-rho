@@ -15,5 +15,5 @@
 BigInt
 PollardRho::serial(EllipticCurve&, const Point&, const Point&)
 {
-	return BigInt();
+    return BigInt();
 }
