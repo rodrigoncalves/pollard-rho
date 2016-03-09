@@ -12,8 +12,53 @@
 #include "point.h"
 #include "pollard_rho.h"
 
+BigInt H(Point&, BigInt&);
+
 BigInt
-PollardRho::serial(EllipticCurve&, const Point&, const Point&)
+PollardRho::serial(EllipticCurve &E, const Point &P, const Point &Q) throw()
 {
-    return BigInt();
+    BigInt L=4, k;
+    BigInt an, bn;
+    BigInt am, bm;
+    std::vector<BigInt> c, d;
+    std::vector<Point> R;
+
+    k = E.order();
+
+    for (int i = 0; i <= L; ++i)
+    {
+        c.push_back(BigInt::random() % k);
+        d.push_back(BigInt::random() % k);
+        R.push_back(P*c.back() + Q*d.back());
+    }
+
+    an = BigInt::random() % k;
+    bn = BigInt::random() % k;
+    am = an;
+    bm = bn;
+    Point Xn = P*an + Q*bn;
+    Point Xm = Xn;
+
+    while (Xn != Xm)
+    {
+        int i = H(Xn, L).get_ui();
+        Xn += R[i];
+        an += c[i];
+        bn += d[i];
+    }
+
+    if (bm == bn)
+    {
+        throw std::domain_error("Indefined value");
+    }
+
+    BigInt f = an-am;
+    BigInt g = (bm-bn).invMod(k);
+    BigInt ret = (f * g) % k;
+    return ret < 0 ? ret + k : ret;
+}
+
+BigInt H(Point &P, BigInt &L)
+{
+    return P.x() % (L + 1);
 }

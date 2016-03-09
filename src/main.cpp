@@ -7,6 +7,7 @@ using namespace std;
 int main()
 {
     int p, A, B;
+    BigInt x;
 
     // p = 47; A = 34; B = 10;
     // EllipticCurve E(p, A, B);
@@ -23,10 +24,18 @@ int main()
     Point P = E.point(4023, 6036);
     Point Q = E.point(4135, 3169);
 
-    BigInt x = PollardRho::original(E, P, Q);
-    cout << "P = (" << P.x() << ", " << P.y() << ")\n";
-    cout << "Q = (" << Q.x() << ", " << Q.y() << ")\n";
-    cout << "x = " << x << endl;
+    try
+    {
+        // x = PollardRho::original(E, P, Q);
+        x = PollardRho::serial(E, P, Q);
+        cout << "P = (" << P.x() << ", " << P.y() << ")\n";
+        cout << "Q = (" << Q.x() << ", " << Q.y() << ")\n";
+        cout << "x = " << x << endl;
+    }
+    catch (std::exception &e)
+    {
+        cerr << e.what() << endl;
+    }
 
     return 0;
 }

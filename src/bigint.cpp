@@ -129,6 +129,28 @@ BigInt::random(const BigInt &max)
     return ret;
 }
 
+unsigned long int
+BigInt::get_ui() const throw()
+{
+    if (m_value.fits_ulong_p())
+    {
+        throw std::range_error("The BigInt value is too big for unsigned long int");
+    }
+
+    return mpz_get_ui(m_value.get_mpz_t());
+}
+
+signed long int
+BigInt::get_si() const throw()
+{
+    if (m_value.fits_slong_p())
+    {
+        throw std::range_error("The BigInt value is too big for signed long int");
+    }
+
+    return mpz_get_si(m_value.get_mpz_t());
+}
+
 /* Assignments */
 BigInt& BigInt::operator=(const std::string &value)
 {

@@ -17,7 +17,7 @@
 using namespace std;
 
 BigInt
-PollardRho::original(EllipticCurve &E, const Point &P, const Point &Q)
+PollardRho::original(EllipticCurve &E, const Point &P, const Point &Q) throw()
 {
     BigInt n, am, an, bm, bn;
     vector<BigInt> a, b;
@@ -85,6 +85,11 @@ PollardRho::original(EllipticCurve &E, const Point &P, const Point &Q)
             bn = b[i];
             break;
         }
+    }
+
+    if (bm == bn)
+    {
+        throw std::domain_error("Indefined value");
     }
 
     BigInt c = an-am;

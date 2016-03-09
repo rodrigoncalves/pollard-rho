@@ -8,10 +8,11 @@
 #ifndef POLLARD_RHO_H
 #define POLLARD_RHO_H
 
-namespace PollardRho {
-	BigInt original(EllipticCurve &E, const Point &P, const Point &Q);
-	BigInt serial(EllipticCurve &E, const Point &P, const Point &Q);
-	BigInt parallelized(EllipticCurve &E, const Point &P, const Point &Q);
+namespace PollardRho
+{
+    BigInt original(EllipticCurve &E, const Point &P, const Point &Q) throw();
+    BigInt serial(EllipticCurve &E, const Point &P, const Point &Q) throw();
+    BigInt parallelized(EllipticCurve &E, const Point &P, const Point &Q) throw();
 }
 
 #endif

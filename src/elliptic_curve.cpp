@@ -21,7 +21,7 @@ BigInt
 EllipticCurve::B() const { return m_B; }
 
 Point
-EllipticCurve::point(const BigInt &x, const BigInt &y)
+EllipticCurve::point(const BigInt &x, const BigInt &y) throw()
 {
     if ((y * y) % m_field == (x*x*x + m_A*x + m_B) % m_field)
     {

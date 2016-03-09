@@ -10,6 +10,7 @@
 
 #include <gmp.h>
 #include <gmpxx.h>
+#include <climits>
 
 #define DEFAULT_CONVERSION_BASE 10
 
@@ -29,7 +30,10 @@ public:
     BigInt invMod(const BigInt &mod) const;
 
     /* static function */
-    static BigInt random(const BigInt &max);
+    static BigInt random(const BigInt &max = INT_MAX);
+
+    unsigned long int get_ui() const throw();
+    signed long int get_si() const throw();
 
     BigInt& operator=(const std::string &value);
     BigInt& operator=(const int &value);

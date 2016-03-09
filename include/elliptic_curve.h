@@ -18,7 +18,7 @@ public:
     BigInt field() const;
     BigInt A() const;
     BigInt B() const;
-    Point point(const BigInt &x, const BigInt &y);
+    Point point(const BigInt &x, const BigInt &y) throw();
     BigInt order();
 
 private:
