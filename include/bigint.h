@@ -34,6 +34,7 @@ public:
 
     unsigned long int get_ui() const throw();
     signed long int get_si() const throw();
+    std::string get_str() const;
 
     BigInt& operator=(const std::string &value);
     BigInt& operator=(const int &value);

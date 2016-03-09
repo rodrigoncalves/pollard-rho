@@ -151,6 +151,12 @@ BigInt::get_si() const throw()
     return mpz_get_si(m_value.get_mpz_t());
 }
 
+std::string
+BigInt::get_str() const
+{
+    return m_value.get_str(m_conversionBase);
+}
+
 /* Assignments */
 BigInt& BigInt::operator=(const std::string &value)
 {
@@ -385,6 +391,6 @@ BigInt operator--(BigInt &a, int)
 
 std::ostream& operator<<(std::ostream &os, const BigInt &val)
 {
-    os << val.m_value.get_str(BigInt::m_conversionBase);
+    os << val.get_str();
     return os;
 }
