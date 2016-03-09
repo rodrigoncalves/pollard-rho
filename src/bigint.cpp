@@ -132,7 +132,7 @@ BigInt::random(const BigInt &max)
 unsigned long int
 BigInt::get_ui() const throw()
 {
-    if (m_value.fits_ulong_p())
+    if (not m_value.fits_ulong_p())
     {
         throw std::range_error("The BigInt value is too big for unsigned long int");
     }
@@ -143,7 +143,7 @@ BigInt::get_ui() const throw()
 signed long int
 BigInt::get_si() const throw()
 {
-    if (m_value.fits_slong_p())
+    if (not m_value.fits_slong_p())
     {
         throw std::range_error("The BigInt value is too big for signed long int");
     }

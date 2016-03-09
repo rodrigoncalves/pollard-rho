@@ -39,15 +39,15 @@ PollardRho::serial(EllipticCurve &E, const Point &P, const Point &Q) throw()
     Point Xn = P*an + Q*bn;
     Point Xm = Xn;
 
-    while (Xn != Xm)
+    do
     {
         int i = H(Xn, L).get_ui();
         Xn += R[i];
         an += c[i];
         bn += d[i];
-    }
+    } while (Xn != Xm);
 
-    if (bm == bn)
+    if (bn == bm)
     {
         throw std::domain_error("Indefined value");
     }
