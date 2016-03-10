@@ -6,7 +6,10 @@
  * License: LGPL. No copyright.
  */
 #include <sstream>
+#include <iostream>
 #include "bigint.h"
+#include <time.h>
+#include <stdlib.h>
 
 using std::stringstream;
 
@@ -116,8 +119,7 @@ BigInt::random(const BigInt &max)
     mpz_init(rop);
     mpz_init(maxz);
     mpz_set(maxz, max.m_value.get_mpz_t());
-    srand(time(NULL));
-    seed = rand();
+    seed = rand();  // OBS: srand(time(NULL)) should be called in the beginning of main()
     gmp_randinit_mt(state);
     gmp_randseed_ui(state, seed);
 

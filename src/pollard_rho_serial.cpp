@@ -17,27 +17,29 @@ BigInt H(Point&, BigInt&);
 BigInt
 PollardRho::serial(EllipticCurve &E, const Point &P, const Point &Q) throw()
 {
-    BigInt L=4, k;
+    BigInt L(4), k(239);
     BigInt an, bn;
     BigInt am, bm;
     std::vector<BigInt> c, d;
     std::vector<Point> R;
 
-    k = E.order();
+    //k = E.order();
 
-    for (int i = 0; i <= L; ++i)
+    for (int i = 0; i < L; ++i)
     {
-        c.push_back(BigInt::random() % k);
-        d.push_back(BigInt::random() % k);
+        c.push_back(BigInt::random(k));
+        d.push_back(BigInt::random(k));
         R.push_back(P*c.back() + Q*d.back());
     }
 
-    an = BigInt::random() % k;
-    bn = BigInt::random() % k;
+    an = BigInt::random(k);
+    bn = BigInt::random(k);
     am = an;
     bm = bn;
     Point Xn = P*an + Q*bn;
     Point Xm = Xn;
+
+//    #define DEBUG
 
     do
     {
@@ -45,6 +47,21 @@ PollardRho::serial(EllipticCurve &E, const Point &P, const Point &Q) throw()
         Xn += R[i];
         an += c[i];
         bn += d[i];
+
+        #ifdef DEBUG
+	std::cout << "i = " << i << std::endl;
+	std::cout << "Xn = (" << Xn.x() << ", " << Xn.y() <<")"<< std::endl;
+	std::cout << "an = " << an << std::endl;
+	std::cout << "bn = " << bn << std::endl;
+        #endif
+
+	for( int j = 0; j < 2; j++ )
+	{
+		int l = H(Xm, L).get_ui();
+		Xm += R[l];
+		am += c[l];
+		bm += d[l];
+	}
     } while (Xn != Xm);
 
     if (bn == bm)
@@ -60,5 +77,5 @@ PollardRho::serial(EllipticCurve &E, const Point &P, const Point &Q) throw()
 
 BigInt H(Point &P, BigInt &L)
 {
-    return P.x() % (L + 1);
+    return P.x() % L;
 }
