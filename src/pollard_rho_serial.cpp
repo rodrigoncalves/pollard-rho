@@ -12,18 +12,20 @@
 #include "point.h"
 #include "pollard_rho.h"
 
+// #define DEBUG
+
 BigInt H(Point&, BigInt&);
 
 BigInt
 PollardRho::serial(EllipticCurve &E, const Point &P, const Point &Q) throw()
 {
-    BigInt L(4), k(239);
+    BigInt L(4), k;
     BigInt an, bn;
     BigInt am, bm;
     std::vector<BigInt> c, d;
     std::vector<Point> R;
 
-    //k = E.order();
+    k = E.order();
 
     for (int i = 0; i < L; ++i)
     {
@@ -39,8 +41,6 @@ PollardRho::serial(EllipticCurve &E, const Point &P, const Point &Q) throw()
     Point Xn = P*an + Q*bn;
     Point Xm = Xn;
 
-//    #define DEBUG
-
     do
     {
         int i = H(Xn, L).get_ui();
@@ -49,19 +49,19 @@ PollardRho::serial(EllipticCurve &E, const Point &P, const Point &Q) throw()
         bn += d[i];
 
         #ifdef DEBUG
-	std::cout << "i = " << i << std::endl;
-	std::cout << "Xn = (" << Xn.x() << ", " << Xn.y() <<")"<< std::endl;
-	std::cout << "an = " << an << std::endl;
-	std::cout << "bn = " << bn << std::endl;
+            std::cout << "i = " << i << "\n";
+            std::cout << "Xn = (" << Xn.x() << ", " << Xn.y() <<")" << "\n";
+            std::cout << "an = " << an << "\n";
+            std::cout << "bn = " << bn << "\n";
         #endif
 
-	for( int j = 0; j < 2; j++ )
-	{
-		int l = H(Xm, L).get_ui();
-		Xm += R[l];
-		am += c[l];
-		bm += d[l];
-	}
+        for (int j = 0; j < 2; j++)
+        {
+            int h = H(Xm, L).get_ui();
+            Xm += R[h];
+            am += c[h];
+            bm += d[h];
+        }
     } while (Xn != Xm);
 
     if (bn == bm)

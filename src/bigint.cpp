@@ -6,7 +6,6 @@
  * License: LGPL. No copyright.
  */
 #include <sstream>
-#include <iostream>
 #include "bigint.h"
 #include <time.h>
 #include <stdlib.h>

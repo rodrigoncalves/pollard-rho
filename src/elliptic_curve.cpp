@@ -21,17 +21,14 @@ BigInt
 EllipticCurve::B() const { return m_B; }
 
 Point
-EllipticCurve::point(const BigInt &x, const BigInt &y) throw()
+EllipticCurve::point(const BigInt &x, const BigInt &y)
 {
     if ((y * y) % m_field == (x*x*x + m_A*x + m_B) % m_field)
     {
-        Point P(this, x, y);
-        return P;
+        return Point(this, x, y);
     }
-    else
-    {
-        throw std::invalid_argument("Point does not belong to curve");
-    }
+
+    throw std::invalid_argument("Point does not belong to curve");
 }
 
 BigInt
