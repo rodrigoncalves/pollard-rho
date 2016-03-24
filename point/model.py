@@ -32,21 +32,19 @@ class Point(object):
         return R
 
     def __iadd__(self, other):
-        # self = self + other
-        # return self
         return self + other
 
     def __sub__(self, other):
         return Point(self.curve, self.x, -self.y)
 
-    def __mul__(self, other):
+    def __mul__(self, n):
         P = self
-        for i in range(0, other):
+        for i in range(n - 1):
             P += self
         return P
 
     def __repr__(self):
-        return 'Point({self.x}, {self.y})'.format(self=self)
+        return '({self.x}, {self.y})'.format(self=self)
 
 def _lambda(P, *args):
     if len(args):
@@ -63,7 +61,6 @@ def _lambda(P, *args):
         a /= d; b /= d
         a = (a + P.curve.field) % P.curve.field
         if (a % b != 0):
-            # b = b.invMod(P.curve.field)
             b = invmod(b, P.curve.field)
             return a * b % P.curve.field
 
@@ -80,7 +77,6 @@ def _lambda(P, *args):
         a /= d; b /= d
         a = (a + P.curve.field) % P.curve.field
         if (a % b != 0):
-            # b = b.invMod(P.curve.field)
             b = invmod(b, P.curve.field)
             return a * b % P.curve.field
 

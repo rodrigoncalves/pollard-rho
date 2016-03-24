@@ -11,7 +11,7 @@ def original(E, P, Q):
     a.append(1)
     b.append(0)
 
-    i = 0L
+    i = 1
     while (True):
         if not __debug__:
             print str(i) + ' | a: ' + str(a[-1]) + ' | b: ' + str(b[-1]),
@@ -39,7 +39,7 @@ def original(E, P, Q):
 
         if not __debug__:
             print ' | S:' + str(s),
-            print ' | (' + str(v[i].x) + ', ' + str(v[i].y) + ')'
+            print '\t| (' + str(v[i].x) + ', ' + str(v[i].y) + ')'
 
         if (v[i].x == v[i/2].x and
             v[i].y == v[i/2].y and

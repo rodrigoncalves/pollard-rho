@@ -2,7 +2,6 @@
 
 from point.model import Point
 
-
 class EllipticCurve(object):
     def __init__(self, field, A, B):
         self.field = field
@@ -14,7 +13,7 @@ class EllipticCurve(object):
             return Point(self, x, y)
 
         raise ValueError("Point does not belong to curve")
-        
+
     def order(self):
         if self.field == 7919 and self.A == 1001 and self.B == 75:
             return 7889
@@ -31,7 +30,7 @@ class EllipticCurve(object):
         return n
 
     def __repr__(self):
-        return 'E(A:{self.A}, B:{self.B}, p:{self.field})'.format(self=self)
+        return '(A:{self.A}, B:{self.B}, p:{self.field})'.format(self=self)
 
 def is_valid(curve, x, y):
     return (y * y) % curve.field == (x*x*x + curve.A*x + curve.B) % curve.field
