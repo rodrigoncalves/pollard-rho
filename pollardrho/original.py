@@ -59,7 +59,6 @@ def original(E, P, Q):
         raise ValueError('Indefined value')
 
     c = an - am
-    # d = (bm-bn).invMod(n)
-    d = invmod(bm-bn, n)
+    d = invmod(bm - bn, n)
     ret = (c * d) % n
-    return ret + n if ret < 0 else ret
+    return (ret + n) % n
