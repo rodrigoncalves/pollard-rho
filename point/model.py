@@ -9,7 +9,7 @@ class Point(object):
             self.curve = curve
             self.x = x
             self.y = y
-    
+
     def is_infinit(self):
         return False
 
@@ -32,31 +32,25 @@ class Point(object):
         return R
 
     def __iadd__(self, other):
-        return self.__eq__(self.__add__(other))
+        # self = self + other
+        # return self
+        return self + other
 
-    def __str__(self):
+    def __sub__(self, other):
+        return Point(self.curve, self.x, -self.y)
+
+    def __mul__(self, other):
+        P = self
+        for i in range(0, other):
+            P += self
+        return P
+
+    def __repr__(self):
         return 'Point({self.x}, {self.y})'.format(self=self)
 
-def _lambda(P, Q=None):
-    if Q is None:
-        a = (3*P.x*P.x + P.curve.A)
-        if (a > P.curve.field):
-            a %= P.curve.field
-
-        b = 2*P.y
-        aux = abs(a)
-        d = gcd(aux, b)
-
-        a /= d; b /= d
-        a = (a + P.curve.field) % P.curve.field
-        if (a % b != 0):
-            # b = b.invMod(P.curve.field)
-            b = invmod(b, P.curve.field)
-            print str(b) + " 1"
-            return a * b % P.curve.field
-
-        return a / b
-    else:
+def _lambda(P, *args):
+    if len(args):
+        Q = args[0]
         a = (Q.y - P.y) % P.curve.field
         if (a > P.curve.field):
             a %= P.curve.field
@@ -71,7 +65,23 @@ def _lambda(P, Q=None):
         if (a % b != 0):
             # b = b.invMod(P.curve.field)
             b = invmod(b, P.curve.field)
-            print str(b) + " 2"
+            return a * b % P.curve.field
+
+        return a / b
+    else:
+        a = (3*P.x*P.x + P.curve.A)
+        if (a > P.curve.field):
+            a %= P.curve.field
+
+        b = 2*P.y
+        aux = abs(a)
+        d = gcd(aux, b)
+
+        a /= d; b /= d
+        a = (a + P.curve.field) % P.curve.field
+        if (a % b != 0):
+            # b = b.invMod(P.curve.field)
+            b = invmod(b, P.curve.field)
             return a * b % P.curve.field
 
         return a / b

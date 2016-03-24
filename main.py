@@ -10,7 +10,7 @@ if __name__ == '__main__':
     R = P + Q
 
     x = original(E, P, Q)
-    x = serial(E, P, Q)
-    x = parallelized(E, P, Q)
+    # x = serial(E, P, Q)
+    # x = parallelized(E, P, Q)
 
     print x

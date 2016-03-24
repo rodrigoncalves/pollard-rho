@@ -30,7 +30,7 @@ class EllipticCurve(object):
 
         return n
 
-    def __str__(self):
+    def __repr__(self):
         return 'E(A:{self.A}, B:{self.B}, p:{self.field})'.format(self=self)
 
 def is_valid(curve, x, y):
