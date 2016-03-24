@@ -33,4 +33,4 @@ class EllipticCurve(object):
         return '(A:{self.A}, B:{self.B}, p:{self.field})'.format(self=self)
 
 def is_valid(curve, x, y):
-    return (y * y) % curve.field == (x*x*x + curve.A*x + curve.B) % curve.field
+    return (y**2) % curve.field == (x**3 + curve.A * x + curve.B) % curve.field

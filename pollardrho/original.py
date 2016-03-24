@@ -63,9 +63,3 @@ def original(E, P, Q):
     d = invmod(bm-bn, n)
     ret = (c * d) % n
     return ret + n if ret < 0 else ret
-
-def serial(E, P, Q):
-    return 0
-
-def parallelized(E, P, Q):
-    return 0

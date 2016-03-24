@@ -1,7 +1,7 @@
 # -*- coding: UTF-8 -*-
 
 from ecc.model import *
-from pollardrho import *
+from pollardrho import original
 
 if __name__ == '__main__':
     E = EllipticCurve(47, 34, 10)
