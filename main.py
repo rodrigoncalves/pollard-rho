@@ -1,7 +1,8 @@
 # -*- coding: UTF-8 -*-
 
 from ecc.model import *
-from pollardrho import original
+from pollardrho.original import *
+from pollardrho.serial import *
 
 if __name__ == '__main__':
     E = EllipticCurve(47, 34, 10)
@@ -13,6 +14,7 @@ if __name__ == '__main__':
     Q = E.point(155, 166)
 
     x = original(E, P, Q)
+    x = serial(E, P, Q)
 
     print 'E = ' + str(E)
     print 'P = ' + str(P)

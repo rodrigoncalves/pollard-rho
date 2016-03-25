@@ -56,7 +56,7 @@ def original(E, P, Q):
         i += 1
 
     if bm == bn:
-        raise ValueError('Indefined value')
+        raise ArithmeticError('Indefined value')
 
     c = an - am
     d = invmod(bm - bn, n)
