@@ -1,6 +1,7 @@
 # -*- coding: UTF-8 -*-
 
 from point.model import Point
+import sage.all as sg
 
 class EllipticCurve(object):
     def __init__(self, field, A, B):
@@ -15,18 +16,8 @@ class EllipticCurve(object):
         raise ValueError("Point does not belong to curve")
 
     def order(self):
-        if self.field == 7919 and self.A == 1001 and self.B == 75:
-            return 7889
-
-        n = 1
-        for x in range(self.field):
-            for y in range(self.field):
-                try:
-                    self.point(x, y)
-                    n+=1
-                except:
-                    pass
-
+        E = sg.EllipticCurve(sg.GF(self.field), [self.A, self.B])
+        n = E.cardinality()
         return n
 
     def __is_valid(self, x, y):
