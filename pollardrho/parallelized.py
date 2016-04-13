@@ -47,7 +47,7 @@ def generate_points(E, P, Q):
 
     lock.release()
 
-def parallelized(E, P, Q):
+def parallelized(E, P, Q, numThreads):
     global n, matchPoint, points
     n = E.order()
 
@@ -56,18 +56,11 @@ def parallelized(E, P, Q):
         d.append(gen.randrange(n))
         R.append(P*c[-1] + Q*d[-1])
 
-    c1 = threading.Thread(target=generate_points, args=(E, P, Q,), name="c1")
-    c2 = threading.Thread(target=generate_points, args=(E, P, Q,), name="c2")
-    c3 = threading.Thread(target=generate_points, args=(E, P, Q,), name="c3")
-    c4 = threading.Thread(target=generate_points, args=(E, P, Q,), name="c4")
-    c1.start()
-    c2.start()
-    c3.start()
-    c4.start()
-    c1.join()
-    c2.join()
-    c3.join()
-    c4.join()
+    for i in range(numThreads):
+        trName = "tr{}".format(i)
+        tr = threading.Thread(target=generate_points, args=(E, P, Q,), name=trName)
+        tr.start()
+        tr.join()
 
    # print points.items()
    # print "Match in {}".format(matchPoint)

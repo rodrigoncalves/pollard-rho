@@ -17,7 +17,7 @@ if __name__ == '__main__':
 
 #    x = original(E, P, Q)
 #    x = serial(E, P, Q)
-    x = parallelized(E, P, Q)
+    x = parallelized(E, P, Q, 4)
 
     print 'E = ' + str(E)
     print 'P = ' + str(P)
