@@ -15,8 +15,8 @@ if __name__ == '__main__':
     P = E.point(5, 116)
     Q = E.point(155, 166)
 
-#    x = original(E, P, Q)
-#    x = serial(E, P, Q)
+    # x = original(E, P, Q)
+    # x = serial(E, P, Q)
     x = parallelized(E, P, Q, 4)
 
     print 'E = ' + str(E)

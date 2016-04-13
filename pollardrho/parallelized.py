@@ -48,6 +48,8 @@ def generate_points(E, P, Q):
     lock.release()
 
 def parallelized(E, P, Q, numThreads):
+    print 'paralelo'
+
     global n, matchPoint, points
     n = E.order()
 

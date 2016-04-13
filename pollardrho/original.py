@@ -3,6 +3,8 @@
 from libnum.modular import invmod
 
 def original(E, P, Q):
+    print 'original'
+
     a = []; b = []; v = []
     R = P
 

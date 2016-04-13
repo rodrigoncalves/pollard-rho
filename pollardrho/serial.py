@@ -4,6 +4,8 @@ from libnum.modular import invmod
 from random import SystemRandom
 
 def serial(E, P, Q):
+    print 'original'
+
     c = []; d = []; R = []
     n = E.order()
     L = 4
