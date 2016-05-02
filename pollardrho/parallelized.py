@@ -62,7 +62,8 @@ def parallelized(E, P, Q, numThreads):
         trName = "tr{}".format(i)
         tr = threading.Thread(target=generate_points, args=(E, P, Q,), name=trName)
         tr.start()
-        tr.join()
+        if i == (numThreads - 1):
+            tr.join()
 
    # print points.items()
    # print "Match in {}".format(matchPoint)
