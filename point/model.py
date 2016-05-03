@@ -81,3 +81,12 @@ def _lambda(P, *args):
             return a * b % P.curve.field
 
         return a / b
+
+def _toBinary(n):
+    """Returns a little endian binary representation of n into a list"""
+    binary = []
+    while n >= 1:
+        rest = n % 2
+        binary.append(rest)
+        n = n // 2
+    return binary
