@@ -38,10 +38,20 @@ class Point(object):
         return Point(self.curve, self.x, -self.y)
 
     def __mul__(self, n):
-        P = self
-        for i in range(n - 1):
-            P += self
-        return P
+        Q = self
+        R = None
+        binary = _toBinary(n)
+
+        if binary[0] == 1:
+            R = self
+        for i in range(1, len(binary)):
+            Q += Q
+            if binary[i] == 1:
+                if type(R) is Point:
+                    R += Q
+                else:
+                    R = Q
+        return R
 
     def __repr__(self):
         return '({self.x}, {self.y})'.format(self=self)
