@@ -4,10 +4,11 @@ from point.model import Point
 import sage.all as sg
 
 class EllipticCurve(object):
-    def __init__(self, field, A, B):
+    def __init__(self, field, A, B, order=None):
         self.field = field
         self.A = A
         self.B = B
+        self.order = self.__calc_order(order)
 
     def point(self, x, y):
         if self.__is_valid(x, y):
@@ -15,10 +16,12 @@ class EllipticCurve(object):
 
         raise ValueError("Point does not belong to curve")
 
-    def order(self):
+    def __calc_order(self, order):
+        if order:
+            return order
+
         E = sg.EllipticCurve(sg.GF(self.field), [self.A, self.B])
-        n = E.cardinality()
-        return n
+        return E.cardinality()
 
     def __is_valid(self, x, y):
         return (y**2) % self.field == (x**3 + self.A * x + self.B) % self.field

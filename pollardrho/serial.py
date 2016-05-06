@@ -7,7 +7,7 @@ def serial(E, P, Q):
     print 'serial'
 
     c = []; d = []; R = []
-    n = E.order()
+    n = E.order
     L = 4
     gen = SystemRandom()
 

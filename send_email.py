@@ -41,7 +41,7 @@ def send_email(*args):
         # s.set_debuglevel(1)
         s.ehlo()
         s.starttls()
-        s.login(sender, "Irodrigo10.")
+        s.login(sender, "")
         s.sendmail(sender, receivers, msg.as_string())
         s.quit()
         print "Successfully sent email"
