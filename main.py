@@ -60,6 +60,7 @@ def main(args):
     end = time.time()
     timer = end - start
 
+    print "Tempo de execução: " + format_time(timer)
     send_email(E, P, Q, x, nbits, timer, "serial", 0)
     print "\n---------------------------------------\n"
 

@@ -31,6 +31,6 @@ if __name__ == '__main__':
     f = open("curves.csv", "w")
     f.write("bits,A,B,p,order,P.x,P.y,Q.x,Q.y\n")
     f.close()
-    for bits in xrange(32,161,8):
+    for bits in xrange(32,161):
         print "bits: " + str(bits)
         genCurve(bits)
