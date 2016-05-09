@@ -52,8 +52,8 @@ def main(args):
     print 'Q = ' + str(Q)
 
     # x = original(E, P, Q)
-    # x = parallelized(E, P, Q, 4)
-    x = serial(E, P, Q)
+    x = parallelized(E, P, Q, 16)
+    # x = serial(E, P, Q)
     # x = P.discrete_log(Q)
     print 'x = ' + str(x)
 

@@ -6,7 +6,7 @@ from random import SystemRandom
 
 
 c = []; d = []; R = []
-L = 4
+L = 32
 gen = SystemRandom()
 match = False
 points = {}
@@ -14,6 +14,18 @@ lock = threading.Lock()
 coefficients = []
 n = 0
 matchPoint = 0
+
+def _initializeGlobalVars():
+    global c, d, R, L, gen, match, points, lock, coefficients, n, matchPoint
+    c = []; d = []; R = []
+    L = 32
+    gen = SystemRandom()
+    match = False
+    points = {}
+    lock = threading.Lock()
+    coefficients = []
+    n = 0
+    matchPoint = 0
 
 def generate_points(E, P, Q, L):
     global points, lock, match, coefficients, matchPoint, n
@@ -49,6 +61,7 @@ def generate_points(E, P, Q, L):
 
 def parallelized(E, P, Q, numThreads):
     print 'parallelized'
+    _initializeGlobalVars()
 
     global n, matchPoint, points
     n = E.order
@@ -91,7 +104,8 @@ def __H(P, L):
     return P.x % L
 
 def __isDistinguished(E, P, L):
-    limit = E.field // L
+    f = E.field
+    limit = f // L
     if P.y < limit:
         return True
     return False
