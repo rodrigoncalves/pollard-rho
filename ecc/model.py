@@ -27,4 +27,4 @@ class EllipticCurve(object):
         return (y**2) % self.field == (x**3 + self.A * x + self.B) % self.field
 
     def __repr__(self):
-        return '(A:{self.A}, B:{self.B}, p:{self.field})'.format(self=self)
+        return '(A:{self.A}, B:{self.B}, p:{self.field}, order:{self.order})'.format(self=self)
