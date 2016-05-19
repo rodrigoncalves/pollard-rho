@@ -4,6 +4,7 @@ from ecc.model import *
 from pollardrho.original import *
 from pollardrho.serial import *
 from pollardrho.parallelized import *
+from pollardrho.multiprocess import *
 from send_email import *
 import csv
 import time
@@ -52,17 +53,18 @@ def main(args):
     print 'Q = ' + str(Q)
 
     # x = original(E, P, Q)
-    x = parallelized(E, P, Q, 16)
+    # x = parallelized(E, P, Q, 16)
     # x = serial(E, P, Q)
+    x = multiprocess(E, P, Q)
     # x = P.discrete_log(Q)
     print 'x = ' + str(x)
 
     end = time.time()
     timer = end - start
 
-    print "Tempo de execução: " + format_time(timer)
-    send_email(E, P, Q, x, nbits, timer, "serial", 0)
-    print "\n---------------------------------------\n"
+    print 'Tempo de execução: ', format_time(timer)
+    send_email(E, P, Q, x, nbits, timer, 'multiprocess', 0)
+    print '\n---------------------------------------\n'
 
 if __name__ == '__main__':
     with open("curves.csv", 'r') as csvfile:
