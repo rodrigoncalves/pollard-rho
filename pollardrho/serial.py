@@ -54,4 +54,7 @@ def serial(E, P, Q):
     return (ret + n) % n
 
 def __H(P, L):
+    if (P.is_infinity):
+        raise TypeError('Point at infinity')
+
     return P.x % L

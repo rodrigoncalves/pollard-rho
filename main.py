@@ -31,9 +31,9 @@ def main(args):
     # P = E.point(30, 26)
     # Q = E.point(35, 41)
 
-    E = EllipticCurve(229, 1, 44)
-    P = E.point(5, 116)
-    Q = E.point(155, 166)
+    # E = EllipticCurve(229, 1, 44)
+    # P = E.point(5, 116)
+    # Q = E.point(155, 166)
 
     # E = sg.EllipticCurve(sg.GF(3753773003), [41779, 81105])
     # P = E(1670032921, 3055253653)
