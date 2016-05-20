@@ -52,12 +52,17 @@ def main(args):
     print 'P = ' + str(P)
     print 'Q = ' + str(Q)
 
-    # x = original(E, P, Q)
-    # x = parallelized(E, P, Q, 16)
-    x = serial(E, P, Q)
-    # x = multiprocess(E, P, Q)
-    # x = P.discrete_log(Q)
-    print 'x = ' + str(x)
+    while (True):
+        try:
+            # x = original(E, P, Q)
+            # x = parallelized(E, P, Q, 16)
+            x = serial(E, P, Q)
+            # x = multiprocess(E, P, Q)
+            # x = P.discrete_log(Q)
+            print 'x = ' + str(x)
+            break
+        except Exception, e:
+            print 'Error:', str(e)
 
     end = time.time()
     timer = end - start
