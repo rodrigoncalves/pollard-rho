@@ -20,6 +20,8 @@ class Point(object):
         return self.x != other.x or self.y != other.y
 
     def __add__(self, other):
+        print '-------------'
+        print self, other
         delta = (self == other and _lambda(self)) or _lambda(self, other)
 
         kx = (delta ** 2 - self.x - other.x) % self.curve.field
@@ -40,17 +42,20 @@ class Point(object):
     def __mul__(self, n):
         Q = self
         R = None
-        binary = _toBinary(n)
 
-        if binary[0] == 1:
+        if n & 1 == 1:
             R = self
-        for i in range(1, len(binary)):
+
+        n >>= 1
+
+        while (n):
             Q += Q
-            if binary[i] == 1:
+            if n & 1 == 1:
                 if type(R) is Point:
                     R += Q
                 else:
                     R = Q
+            n >>= 1
         return R
 
     def __repr__(self):
@@ -91,12 +96,3 @@ def _lambda(P, *args):
             return a * b % P.curve.field
 
         return a / b
-
-def _toBinary(n):
-    """Returns a little endian binary representation of n into a list"""
-    binary = []
-    while n >= 1:
-        rest = n % 2
-        binary.append(rest)
-        n = n // 2
-    return binary

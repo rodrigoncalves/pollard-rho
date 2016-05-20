@@ -23,9 +23,9 @@ def client_func(E, P, Q):
     Xm = X
 
     while (True):
-        # if (__isDistinguished(E, X, L)):
-        # arg = (a, b, X)
-        # sendToServer(arg)
+        if (__isDistinguished(E, X, L)):
+            arg = (a, b, X)
+            sendToServer(arg)
 
         i = __H(X, L)
         X += R[i]
@@ -68,8 +68,6 @@ def server_func(n, return_dict):
             return_dict[0] = arg
             killProcesses()
             return
-        else:
-            continue
 
         a = arg[0]; b = arg[1]; P = arg[2]
         P = str(P)

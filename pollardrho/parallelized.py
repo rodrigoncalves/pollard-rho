@@ -36,7 +36,7 @@ def generate_points(E, P, Q, L):
         if __isDistinguished(E, Xn, L):
             ct = threading.currentThread().getName()
             #print "{}: x = {}, y = {}\n".format(ct, Xn.x, Xn.y)
-            pstr = "({}, {})".format(Xn.x, Xn.y)
+            pstr = str(Xn)
             lock.acquire()
             if match == True:
                 break
@@ -47,10 +47,10 @@ def generate_points(E, P, Q, L):
                 #print "Thread {} found a match in point {}".format(ct, pstr)
                 coefficients = [an, bn]
                 break
-            else:
-                #print threading.currentThread().getName() + ' inserted {}-{}'.format(Xn, [an, bn])
-                points[pstr] = [an, bn]
-                lock.release()
+
+            #print threading.currentThread().getName() + ' inserted {}-{}'.format(Xn, [an, bn])
+            points[pstr] = [an, bn]
+            lock.release()
 
         i = __H(Xn, L)
         Xn += R[i]
@@ -79,8 +79,6 @@ def parallelized(E, P, Q, numThreads):
         trName = "tr{}".format(i)
         tr = threading.Thread(target=generate_points, args=(E, P, Q, L,), name=trName)
         threads.append(tr)
-
-    for tr in threads:
         tr.start()
 
     for tr in threads:
@@ -106,6 +104,4 @@ def __H(P, L):
 def __isDistinguished(E, P, L):
     f = E.field
     limit = f // L
-    if P.y < limit:
-        return True
-    return False
+    return P.y < limit

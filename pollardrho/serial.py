@@ -12,8 +12,8 @@ def serial(E, P, Q):
     gen = SystemRandom()
 
     for i in range(L):
-        c.append(gen.randrange(n))
-        d.append(gen.randrange(n))
+        c.append(gen.randrange(n-1)+1)
+        d.append(gen.randrange(n-1)+1)
         R.append(P*c[-1] + Q*d[-1])
 
     an = gen.randrange(n)

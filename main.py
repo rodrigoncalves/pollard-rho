@@ -31,9 +31,9 @@ def main(args):
     # P = E.point(30, 26)
     # Q = E.point(35, 41)
 
-    # E = EllipticCurve(229, 1, 44)
-    # P = E.point(5, 116)
-    # Q = E.point(155, 166)
+    E = EllipticCurve(229, 1, 44)
+    P = E.point(5, 116)
+    Q = E.point(155, 166)
 
     # E = sg.EllipticCurve(sg.GF(3753773003), [41779, 81105])
     # P = E(1670032921, 3055253653)
@@ -54,8 +54,8 @@ def main(args):
 
     # x = original(E, P, Q)
     # x = parallelized(E, P, Q, 16)
-    # x = serial(E, P, Q)
-    x = multiprocess(E, P, Q)
+    x = serial(E, P, Q)
+    # x = multiprocess(E, P, Q)
     # x = P.discrete_log(Q)
     print 'x = ' + str(x)
 
