@@ -18,9 +18,6 @@ def client_func(E, P, Q):
     a = gen.randrange(n)
     b = gen.randrange(n)
     X = P*a + Q*b
-    am = a
-    bm = b
-    Xm = X
 
     while (True):
         if (__isDistinguished(E, X, L)):
@@ -32,25 +29,6 @@ def client_func(E, P, Q):
         a += c[i]
         b += d[i]
 
-        for j in range(2):
-            h = __H(Xm, L)
-            Xm += R[h]
-            am += c[h]
-            bm += d[h]
-
-        if X == Xm:
-            break
-
-    if (b == bm):
-        raise ArithmeticError('Indefined value')
-
-    f = a-am
-    g = invmod(bm-b, n)
-    ret = (f * g) % n
-    x = (ret + n) % n
-
-    sendToServer(x)
-
 def server_func(n, return_dict):
     address = ('localhost', 6000)
     listener = Listener(address)
@@ -60,8 +38,6 @@ def server_func(n, return_dict):
 
     while (True):
         conn = listener.accept()
-
-        # Receive triple (a, b, P) from client
         arg = conn.recv()
 
         if (arg in ZZ):
@@ -95,7 +71,6 @@ def server_func(n, return_dict):
 
     conn.close()
     listener.close()
-    print 'Server Done!'
     return_dict[0] = x
 
 def sendToServer(arg):
@@ -107,6 +82,7 @@ def sendToServer(arg):
 def killProcesses():
     for w in workers:
         w.terminate()
+        workers.pop()
 
 def multiprocess(E, P, Q):
     print 'multiprocess'
@@ -120,7 +96,6 @@ def multiprocess(E, P, Q):
         d.append(gen.randrange(n))
         R.append(P*c[-1] + Q*d[-1])
 
-#------ for each M processor -----#
     manager = Manager()
     return_dict = manager.dict()
 
@@ -134,6 +109,9 @@ def multiprocess(E, P, Q):
 
     server.start()
     server.join()
+
+    # empty the list of workers
+    workers[:] = []
 
     x = return_dict[0]
     return x

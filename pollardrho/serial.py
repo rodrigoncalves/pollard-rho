@@ -29,13 +29,6 @@ def serial(E, P, Q):
         an += c[i]
         bn += d[i]
 
-        if not __debug__:
-            print "i = " +  str(i)
-            print "Xn = (" +  str(Xn.x) +  ", " +  str(Xn.y) + ")"
-            print "an = " +  str(an)
-            print "bn = " +  str(bn)
-            print '---------------------------------------'
-
         for j in range(2):
             h = __H(Xm, L)
             Xm += R[h]

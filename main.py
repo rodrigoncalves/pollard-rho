@@ -22,7 +22,6 @@ def main(args):
     Qx = int(args[7])
     Qy = int(args[8])
 
-
     E = EllipticCurve(p, A, B, order)
     P = E.point(Px, Py)
     Q = E.point(Qx, Qy)
@@ -56,8 +55,8 @@ def main(args):
         try:
             # x = original(E, P, Q)
             # x = parallelized(E, P, Q, 16)
-            x = serial(E, P, Q)
-            # x = multiprocess(E, P, Q)
+            # x = serial(E, P, Q)
+            x = multiprocess(E, P, Q)
             # x = P.discrete_log(Q)
             print 'x = ' + str(x)
             break
