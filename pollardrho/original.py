@@ -3,7 +3,7 @@
 from libnum.modular import invmod
 
 def original(E, P, Q):
-    print 'original'
+    print 'Algorithm: original'
 
     a = []; b = []; v = []
     R = P

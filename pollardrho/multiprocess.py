@@ -3,17 +3,13 @@
 from libnum.modular import invmod
 from random import SystemRandom
 from multiprocessing import *
-from multiprocessing.connection import Listener, Client
-from send_email import format_time
-from sage.rings.integer_ring import ZZ
 import multiprocessing as mp
 
+L = 64
 c = []; d = []; R = []
-workers = []
 client_pipe, server_pipe = Pipe()
 
 def client_func(E, P, Q):
-    L = 4
     n = E.order
     gen = SystemRandom()
     a = gen.randrange(n)
@@ -30,6 +26,9 @@ def client_func(E, P, Q):
         a += c[i]
         b += d[i]
 
+def sendToServer(arg):
+    client_pipe.send(arg)
+
 def server_func(n, return_dict):
     triples = {}
     triple_collided = []
@@ -37,17 +36,11 @@ def server_func(n, return_dict):
     while (True):
         arg = server_pipe.recv()
 
-        # if (arg in ZZ):
-        #     return_dict[0] = arg
-        #     killProcesses()
-        #     return
-
         a = arg[0]; b = arg[1]; P = arg[2]
         P = str(P)
 
         if (triples.has_key(P)):
             triple_collided = arg
-            killProcesses()
             break
 
         triples[P] = [a, b]
@@ -68,19 +61,10 @@ def server_func(n, return_dict):
 
     return_dict[0] = x
 
-def sendToServer(arg):
-    client_pipe.send(arg)
-
-def killProcesses():
-    for w in workers:
-        w.terminate()
-        workers.pop()
-
 def multiprocess(E, P, Q):
-    print 'multiprocess'
+    print 'Algorithm: multiprocess'
 
     n = E.order
-    L = 4
     gen = SystemRandom()
 
     for i in range(L):
@@ -88,25 +72,30 @@ def multiprocess(E, P, Q):
         d.append(gen.randrange(n))
         R.append(P*c[-1] + Q*d[-1])
 
+    # create manager with the return value
     manager = Manager()
     return_dict = manager.dict()
 
+    # create the server
     server = Process(name='server', target=server_func, args=(n, return_dict))
-
     cores = mp.cpu_count()
+    workers = []
+
+    # create the processes
     for i in range(cores):
         w = Process(name='worker_'+str(i+1), target=client_func, args=(E, P, Q))
         workers.append(w)
         w.start()
 
     server.start()
-    server.join()
+    server.join() # wait server end
+
+    # kill the processes
+    for w in workers:
+        w.terminate()
 
     # empty lists
-    c[:] = []
-    d[:] = []
-    R[:] = []
-    workers[:] = []
+    del c[:], d[:], R[:], workers[:]
 
     x = return_dict[0]
     return x

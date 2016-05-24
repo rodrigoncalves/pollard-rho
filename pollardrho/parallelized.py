@@ -60,7 +60,7 @@ def generate_points(E, P, Q, L):
     lock.release()
 
 def parallelized(E, P, Q, numThreads):
-    print 'parallelized'
+    print 'Algorithm: parallelized'
     _initializeGlobalVars()
 
     global n, matchPoint, points
