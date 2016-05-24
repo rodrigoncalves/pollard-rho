@@ -40,10 +40,10 @@ def server_func(n, return_dict):
         conn = listener.accept()
         arg = conn.recv()
 
-        if (arg in ZZ):
-            return_dict[0] = arg
-            killProcesses()
-            return
+        # if (arg in ZZ):
+        #     return_dict[0] = arg
+        #     killProcesses()
+        #     return
 
         a = arg[0]; b = arg[1]; P = arg[2]
         P = str(P)
@@ -110,7 +110,10 @@ def multiprocess(E, P, Q):
     server.start()
     server.join()
 
-    # empty the list of workers
+    # empty lists
+    c[:] = []
+    d[:] = []
+    R[:] = []
     workers[:] = []
 
     x = return_dict[0]

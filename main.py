@@ -58,10 +58,15 @@ def main(args):
             # x = serial(E, P, Q)
             x = multiprocess(E, P, Q)
             # x = P.discrete_log(Q)
-            print 'x = ' + str(x)
+            print 'x =', x
             break
         except Exception, e:
             print 'Error:', str(e)
+
+    if (P*x == Q):
+        print 'Correct!'
+    else:
+        print 'Wrong!'
 
     end = time.time()
     timer = end - start
