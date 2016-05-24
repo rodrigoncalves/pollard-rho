@@ -6,11 +6,16 @@ from pollardrho.serial import *
 from pollardrho.parallelized import *
 from pollardrho.multiprocess import *
 from send_email import *
+from datetime import datetime
 import csv
 import time
 
 def main(args):
     start = time.time()
+    now = datetime.now()
+    moment = str(now.day)+'/'+str(now.month)+'/'+str(now.year)+' '\
+    +str(now.hour)+'h '+str(now.minute)+'m '+str(now.second)+'s'
+    print 'Início em:', moment
 
     nbits = int(args[0])
     A = int(args[1])
@@ -51,13 +56,14 @@ def main(args):
         except Exception, e:
             print 'Error:', str(e)
 
-    print 'Correct!' if (P*x == Q) else 'Wrong!'
+    iscorrect = (P*x == Q and 'Correct!') or 'Wrong'
+    print iscorrect
 
     end = time.time()
     timer = end - start
 
     print 'Tempo de execução: ', format_time(timer)
-    send_email(E, P, Q, x, nbits, timer, 'multiprocess', 0)
+    send_email(E, P, Q, x, nbits, timer, 'multiprocess', iscorrect, moment)
     print '\n---------------------------------------\n'
 
 if __name__ == '__main__':
