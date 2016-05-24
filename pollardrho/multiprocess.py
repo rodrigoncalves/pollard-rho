@@ -10,6 +10,7 @@ import multiprocessing as mp
 
 c = []; d = []; R = []
 workers = []
+client_pipe, server_pipe = Pipe()
 
 def client_func(E, P, Q):
     L = 4
@@ -30,15 +31,11 @@ def client_func(E, P, Q):
         b += d[i]
 
 def server_func(n, return_dict):
-    address = ('localhost', 6000)
-    listener = Listener(address)
-
     triples = {}
     triple_collided = []
 
     while (True):
-        conn = listener.accept()
-        arg = conn.recv()
+        arg = server_pipe.recv()
 
         # if (arg in ZZ):
         #     return_dict[0] = arg
@@ -69,15 +66,10 @@ def server_func(n, return_dict):
     ret = (f * g) % n
     x = (ret + n) % n
 
-    conn.close()
-    listener.close()
     return_dict[0] = x
 
 def sendToServer(arg):
-    address = ('localhost', 6000)
-    conn = Client(address)
-    conn.send(arg)
-    conn.close()
+    client_pipe.send(arg)
 
 def killProcesses():
     for w in workers:
