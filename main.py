@@ -13,9 +13,6 @@ import time
 def main(args):
     start = time.time()
     now = datetime.now()
-    moment = str(now.day)+'/'+str(now.month)+'/'+str(now.year)+' '\
-    +str(now.hour)+'h '+str(now.minute)+'m '+str(now.second)+'s'
-    print 'Início em:', moment
 
     nbits = int(args[0])
     A = int(args[1])
@@ -26,6 +23,13 @@ def main(args):
     Py = int(args[6])
     Qx = int(args[7])
     Qy = int(args[8])
+
+    if nbits < 32:
+        return
+
+    moment = str(now.day)+'/'+str(now.month)+'/'+str(now.year)+' '\
+    +str(now.hour)+'h '+str(now.minute)+'m '+str(now.second)+'s'
+    print 'Início em:', moment
 
     E = EllipticCurve(p, A, B, order)
     P = E.point(Px, Py)
@@ -63,7 +67,7 @@ def main(args):
     timer = end - start
 
     print 'Tempo de execução: ', format_time(timer)
-    send_email(E, P, Q, x, nbits, timer, 'multiprocess', iscorrect, moment)
+    send_email(E, P, Q, x, nbits, timer, 'multiprocess', iscorrect)
     print '\n---------------------------------------\n'
 
 if __name__ == '__main__':

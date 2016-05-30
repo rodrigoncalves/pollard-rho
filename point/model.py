@@ -58,9 +58,9 @@ class Point(object):
     def __repr__(self):
         return '({self.x}, {self.y})'.format(self=self)
 
-def _lambda(P, *args):
-    if len(args):
-        Q = args[0]
+def _lambda(P, other=None):
+    if other:
+        Q = other
         a = (Q.y - P.y) % P.curve.field
         b = Q.x - P.x
 

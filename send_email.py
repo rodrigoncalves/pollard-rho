@@ -13,7 +13,6 @@ def send_email(*args):
     time = args[5]
     algorithm = args[6]
     iscorrect = args[7]
-    moment = args[8]
 
     rodrigo = 'rodrigosg2000@gmail.com'
     carlos = 'carlostjunior517@gmail.com'
@@ -22,6 +21,7 @@ def send_email(*args):
     receivers = [rodrigo, carlos]
 
     msg = MIMEText(
+        "Máquina: HighTower\n"
         "Algoritmo: " + algorithm + "\n"
         "Bits = " + str(nbits) + " bits\n"
         "E = "+ str(E) + "\n"
@@ -29,7 +29,6 @@ def send_email(*args):
         "Q: " + str(Q) + "\n"
         "x = " + str(x) + "\n"
         + str(iscorrect) + "\n"
-        "Início em: " + str(moment) + "\n"
         "Tempo de execução: " + format_time(time))
     msg['Subject'] = "Quebra da curva de " + str(nbits) + " bits"
     msg['From'] = "Rodrigo Gonçalves " + sender
