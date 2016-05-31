@@ -4,6 +4,7 @@
 #include <time.h>
 
 using namespace std;
+using namespace PollardRho;
 
 int main()
 {
@@ -28,8 +29,8 @@ int main()
 
     try
     {
-        // x = PollardRho::original(E, P, Q);
-        x = PollardRho::serial(E, P, Q);
+        // x = original(E, P, Q);
+        x = serial(E, P, Q);
         cout << "P = (" << P.x() << ", " << P.y() << ")\n";
         cout << "Q = (" << Q.x() << ", " << Q.y() << ")\n";
         cout << "x = " << x << endl;
