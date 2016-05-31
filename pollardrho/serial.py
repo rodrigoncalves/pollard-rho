@@ -39,7 +39,7 @@ def serial(E, P, Q):
             break
 
     if (bn == bm):
-        raise ArithmeticError("Indefined value")
+        raise ArithmeticError("Undefined value")
 
     f = an-am
     g = invmod(bm-bn, n)

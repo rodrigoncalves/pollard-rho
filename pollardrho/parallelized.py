@@ -91,7 +91,7 @@ def parallelized(E, P, Q, numThreads):
         l = points.get(mstr)
 
     if (coefficients[1] == l[1]):
-        raise ArithmeticError("Indefined value")
+        raise ArithmeticError("Undefined value")
 
     f = l[0] - coefficients[0]
     g = invmod(coefficients[1]-l[1], n)

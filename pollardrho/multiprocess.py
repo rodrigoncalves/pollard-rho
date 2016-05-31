@@ -52,7 +52,7 @@ def server_func(n, return_dict):
     bn = triples.get(P)[1]
 
     if (bn == bm):
-        raise ArithmeticError('Indefined value')
+        raise ArithmeticError('Undefined value')
 
     f = an-am
     g = invmod(bm-bn, n)

@@ -28,8 +28,8 @@ def main(args):
         return
 
     moment = str(now.day)+'/'+str(now.month)+'/'+str(now.year)+' '\
-    +str(now.hour)+'h '+str(now.minute)+'m '+str(now.second)+'s'
-    print 'Início em:', moment
+    +str(now.hour)+':'+str(now.minute)+':'+str(now.second)
+    print 'Started at', moment
 
     E = EllipticCurve(p, A, B, order)
     P = E.point(Px, Py)

@@ -52,7 +52,7 @@ def original(E, P, Q):
         i += 1
 
     if bm == bn:
-        raise ArithmeticError('Indefined value')
+        raise ArithmeticError('Undefined value')
 
     c = an - am
     d = invmod(bm - bn, n)
