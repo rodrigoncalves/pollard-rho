@@ -16,6 +16,14 @@ class EllipticCurve(object):
 
         raise ValueError("Point does not belong to curve")
 
+    def nbits(self):
+        nbits = 0
+        field = self.field
+        while (field):
+            field >>= 1
+            nbits += 1
+        return nbits
+
     def __calc_order(self, order):
         if order:
             return order

@@ -1,6 +1,7 @@
 # -*- coding: UTF-8 -*-
 
 from ecc.model import *
+from email.mime.text import MIMEText
 from pollardrho.original import *
 from pollardrho.serial import *
 from pollardrho.parallelized import *
@@ -11,9 +12,6 @@ import csv
 import time
 
 def main(args):
-    start = time.time()
-    now = datetime.now()
-
     nbits = int(args[0])
     A = int(args[1])
     B = int(args[2])
@@ -26,10 +24,6 @@ def main(args):
 
     if nbits < 32:
         return
-
-    moment = str(now.day)+'/'+str(now.month)+'/'+str(now.year)+' '\
-    +str(now.hour)+':'+str(now.minute)+':'+str(now.second)
-    print 'Started at', moment
 
     E = EllipticCurve(p, A, B, order)
     P = E.point(Px, Py)
@@ -50,24 +44,75 @@ def main(args):
 
     while (True):
         try:
-            # x = original(E, P, Q)
-            # x = parallelized(E, P, Q, 16)
-            # x = serial(E, P, Q)
+            start = time.time()
+            now = datetime.now()
+            moment = str(now.day)+'/'+str(now.month)+'/'+str(now.year)+' '\
+            +str(now.hour)+':'+str(now.minute)+':'+str(now.second)
+            print 'Started at', moment
+
             x = multiprocess(E, P, Q)
-            # x = P.discrete_log(Q)
+
             print 'x =', x
             break
+        except MemoryError:
+            print 'Error: Memory Error'
+
+            end = time.time()
+            timer = end - start
+            runtime = format_time(timer)
+
+            msg = MIMEText(
+                'Máquina: HighTower\n'
+                'Algoritmo: multiprocess\n'
+                'Bits = ' + str(nbits) + ' bits\n'
+                'E = '+ str(E) + '\n'
+                'P: ' + str(P) + '\n'
+                'Q: ' + str(Q) + '\n'
+                'Erro: Falta de memória\n'
+                'Tempo de execução: ' + runtime)
+            msg['Subject'] = 'Falta de memória na curva de ' + str(nbits) + ' bits - HighTower'
+            send_email(msg)
+            print '---------------------------------------'
         except Exception, e:
             print 'Error:', str(e)
 
-    iscorrect = (P*x == Q and 'Correct!') or 'Wrong'
-    print iscorrect
+            end = time.time()
+            timer = end - start
+            runtime = format_time(timer)
+
+            msg = MIMEText(
+                'Máquina: HighTower\n'
+                'Algoritmo: multiprocess\n'
+                'Bits = ' + str(nbits) + ' bits\n'
+                'E = '+ str(E) + '\n'
+                'P: ' + str(P) + '\n'
+                'Q: ' + str(Q) + '\n'
+                'Tempo de execução: ' + runtime)
+            msg['Subject'] = 'Erro detectado na curva de ' + str(nbits) + ' bits - HighTower'
+            send_email(msg)
+            print '---------------------------------------'
 
     end = time.time()
     timer = end - start
+    runtime = format_time(timer)
 
-    print 'Tempo de execução: ', format_time(timer)
-    send_email(E, P, Q, x, nbits, timer, 'multiprocess', iscorrect)
+    iscorrect = (P*x == Q and 'Correct!') or 'Wrong'
+    print iscorrect
+    print 'Tempo de execução: ', runtime
+
+    msg = MIMEText(
+        'Máquina: HighTower\n'
+        'Algoritmo: multiprocess\n'
+        'Bits = ' + str(nbits) + ' bits\n'
+        'E = '+ str(E) + '\n'
+        'P: ' + str(P) + '\n'
+        'Q: ' + str(Q) + '\n'
+        'x = ' + str(x) + '\n'
+        'Distinguished point: P.y < (E.field // ' + str(E.nbits()*2) + ')\n'
+        + str(iscorrect) + '\n'
+        'Tempo de execução: ' + runtime)
+    msg['Subject'] = 'Quebra da curva de ' + str(nbits) + ' bits - HighTower'
+    send_email(msg)
     print '\n---------------------------------------\n'
 
 if __name__ == '__main__':

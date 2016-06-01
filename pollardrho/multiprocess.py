@@ -104,4 +104,4 @@ def __H(P, L):
     return P.x % L
 
 def __isDistinguished(E, P, L):
-    return P.y < (E.field // L)
+    return P.y < (E.field // E.nbits()*2)
