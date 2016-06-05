@@ -54,25 +54,6 @@ def main(args):
 
             print 'x =', x
             break
-        except MemoryError:
-            print 'Error: Memory Error'
-
-            end = time.time()
-            timer = end - start
-            runtime = format_time(timer)
-
-            msg = MIMEText(
-                'Máquina: HighTower\n'
-                'Algoritmo: multiprocess\n'
-                'Bits = ' + str(nbits) + ' bits\n'
-                'E = '+ str(E) + '\n'
-                'P: ' + str(P) + '\n'
-                'Q: ' + str(Q) + '\n'
-                'Erro: Falta de memória\n'
-                'Tempo de execução: ' + runtime)
-            msg['Subject'] = 'Falta de memória na curva de ' + str(nbits) + ' bits - HighTower'
-            send_email(msg)
-            print '---------------------------------------'
         except Exception, e:
             print 'Error:', str(e)
 
