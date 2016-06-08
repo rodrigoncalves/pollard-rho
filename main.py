@@ -22,7 +22,7 @@ def main(args):
     Qx = int(args[7])
     Qy = int(args[8])
 
-    if nbits < 32:
+    if nbits < 66:
         return
 
     E = EllipticCurve(p, A, B, order)
@@ -89,7 +89,7 @@ def main(args):
         'P: ' + str(P) + '\n'
         'Q: ' + str(Q) + '\n'
         'x = ' + str(x) + '\n'
-        'Distinguished point: P.y < (E.field // ' + str(E.nbits()*2) + ')\n'
+        'Distinguished point: 24-bit\n'
         + str(iscorrect) + '\n'
         'Tempo de execução: ' + runtime)
     msg['Subject'] = 'Quebra da curva de ' + str(nbits) + ' bits - HighTower'

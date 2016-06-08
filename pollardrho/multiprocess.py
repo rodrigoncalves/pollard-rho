@@ -17,7 +17,7 @@ def client_func(E, P, Q):
     X = P*a + Q*b
 
     while (True):
-        if (__isDistinguished(E, X, L)):
+        if (__isDistinguished(X)):
             arg = (a, b, X)
             sendToServer(arg)
 
@@ -103,5 +103,13 @@ def multiprocess(E, P, Q):
 def __H(P, L):
     return P.x % L
 
-def __isDistinguished(E, P, L):
-    return P.y < (E.field // E.nbits()*2)
+# Hamming weight of the least 32 bits of the
+# x-coordinate of the point less than 8
+def __isDistinguished(P):
+    mask = (0x1 << 32) - 1
+    x = P.x & mask
+    x -= (x >> 1) & 0x5555555555555555
+    x = (x & 0x3333333333333333) + ((x >> 2) & 0x3333333333333333)
+    x = (x + (x >> 4)) & 0x0f0f0f0f0f0f0f0f
+    count = ((x * 0x0101010101010101) & 0xffffffffffffffff ) >> 56
+    return count <= 8
