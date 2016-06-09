@@ -103,13 +103,14 @@ def multiprocess(E, P, Q):
 def __H(P, L):
     return P.x % L
 
-# Hamming weight of the least 32 bits of the
-# x-coordinate of the point less than 8
+# Hamming weight of the x-coordinate of the point less than 24
 def __isDistinguished(P):
-    mask = (0x1 << 32) - 1
-    x = P.x & mask
+    count = __popcount(P.x)
+    return count < 24
+
+# Number of bits equal to 1
+def __popcount(x):
     x -= (x >> 1) & 0x5555555555555555
     x = (x & 0x3333333333333333) + ((x >> 2) & 0x3333333333333333)
     x = (x + (x >> 4)) & 0x0f0f0f0f0f0f0f0f
-    count = ((x * 0x0101010101010101) & 0xffffffffffffffff ) >> 56
-    return count <= 8
+    return ((x * 0x0101010101010101) & 0xffffffffffffffff ) >> 56

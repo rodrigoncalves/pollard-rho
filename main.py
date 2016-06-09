@@ -89,7 +89,7 @@ def main(args):
         'P: ' + str(P) + '\n'
         'Q: ' + str(Q) + '\n'
         'x = ' + str(x) + '\n'
-        'Distinguished point: 24-bit\n'
+        'Distinguished point: 28-bit\n'
         + str(iscorrect) + '\n'
         'Tempo de execução: ' + runtime)
     msg['Subject'] = 'Quebra da curva de ' + str(nbits) + ' bits - HighTower'
