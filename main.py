@@ -22,7 +22,7 @@ def main(args):
     Qx = int(args[7])
     Qy = int(args[8])
 
-    if nbits < 66:
+    if nbits < 32:
         return
 
     E = EllipticCurve(p, A, B, order)
@@ -50,7 +50,7 @@ def main(args):
             +str(now.hour)+':'+str(now.minute)+':'+str(now.second)
             print 'Started at', moment
 
-            x = multiprocess(E, P, Q)
+            x = parallelized(E, P, Q)
 
             print 'x =', x
             break
@@ -68,6 +68,7 @@ def main(args):
                 'E = '+ str(E) + '\n'
                 'P: ' + str(P) + '\n'
                 'Q: ' + str(Q) + '\n'
+                'Distinguished point: 28-bit\n'
                 'Tempo de execução: ' + runtime)
             msg['Subject'] = 'Erro detectado na curva de ' + str(nbits) + ' bits - HighTower'
             send_email(msg)
@@ -83,13 +84,14 @@ def main(args):
 
     msg = MIMEText(
         'Máquina: HighTower\n'
-        'Algoritmo: multiprocess\n'
+        'Algoritmo: parallelized\n'
         'Bits = ' + str(nbits) + ' bits\n'
         'E = '+ str(E) + '\n'
         'P: ' + str(P) + '\n'
         'Q: ' + str(Q) + '\n'
         'x = ' + str(x) + '\n'
-        'Distinguished point: 28-bit\n'
+        # 'Distinguished point: 28-bit\n'
+
         + str(iscorrect) + '\n'
         'Tempo de execução: ' + runtime)
     msg['Subject'] = 'Quebra da curva de ' + str(nbits) + ' bits - HighTower'

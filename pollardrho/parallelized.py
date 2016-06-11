@@ -1,107 +1,98 @@
 # -*- coding: UTF-8 -*-
 
-import threading
 from libnum.modular import invmod
 from random import SystemRandom
+from multiprocessing import *
+import multiprocessing as mp
 
-
+L = 64
 c = []; d = []; R = []
-L = 32
-gen = SystemRandom()
-match = False
-points = {}
-lock = threading.Lock()
-coefficients = []
-n = 0
-matchPoint = 0
+client_pipe, server_pipe = Pipe()
 
-def _initializeGlobalVars():
-    global c, d, R, L, gen, match, points, lock, coefficients, n, matchPoint
-    c = []; d = []; R = []
-    L = 32
+def client_func(E, P, Q):
+    n = E.order
     gen = SystemRandom()
-    match = False
-    points = {}
-    lock = threading.Lock()
-    coefficients = []
-    n = 0
-    matchPoint = 0
-
-def generate_points(E, P, Q, L):
-    global points, lock, match, coefficients, matchPoint, n
     an = gen.randrange(n)
     bn = gen.randrange(n)
+    am = an
+    bm = bn
     Xn = P*an + Q*bn
-    while True:
-        if __isDistinguished(E, Xn, L):
-            ct = threading.currentThread().getName()
-            #print "{}: x = {}, y = {}\n".format(ct, Xn.x, Xn.y)
-            pstr = str(Xn)
-            lock.acquire()
-            if match == True:
-                break
+    Xm = Xn
 
-            if pstr in points.keys():
-                match = True
-                matchPoint = Xn
-                #print "Thread {} found a match in point {}".format(ct, pstr)
-                coefficients = [an, bn]
-                break
-
-            #print threading.currentThread().getName() + ' inserted {}-{}'.format(Xn, [an, bn])
-            points[pstr] = [an, bn]
-            lock.release()
-
+    while (True):
         i = __H(Xn, L)
         Xn += R[i]
-        an = (an + c[i]) % n
-        bn = (bn + d[i]) % n
+        an += c[i]
+        bn += d[i]
 
-    lock.release()
+        for j in range(2):
+            h = __H(Xm, L)
+            Xm += R[h]
+            am += c[h]
+            bm += d[h]
 
-def parallelized(E, P, Q, numThreads):
+        if Xn == Xm:
+            break
+
+    if (bn == bm):
+        raise ArithmeticError('Undefined value')
+
+    f = an-am
+    g = invmod(bm-bn, n)
+    ret = (f * g) % n
+    ret = (ret + n) % n
+    sendToServer(ret)
+
+def sendToServer(arg):
+    client_pipe.send(arg)
+
+def server_func(n, return_dict):
+    triples = {}
+    triple_collided = []
+
+    while (True):
+        arg = server_pipe.recv()
+        return_dict[0] = arg
+        break
+
+def parallelized(E, P, Q):
     print 'Algorithm: parallelized'
-    _initializeGlobalVars()
 
-    global n, matchPoint, points
     n = E.order
-    #print "Order is {}".format(n)
+    gen = SystemRandom()
 
     for i in range(L):
-        #print "branch created"
         c.append(gen.randrange(n))
         d.append(gen.randrange(n))
         R.append(P*c[-1] + Q*d[-1])
 
-    threads = []
-    for i in range(numThreads):
-        #print "thread created"
-        trName = "tr{}".format(i)
-        tr = threading.Thread(target=generate_points, args=(E, P, Q, L,), name=trName)
-        threads.append(tr)
-        tr.start()
+    # create manager with the return value
+    manager = Manager()
+    return_dict = manager.dict()
 
-    for tr in threads:
-        tr.join()
+    # create the server
+    server = Process(name='server', target=server_func, args=(n, return_dict))
+    cores = mp.cpu_count()
+    workers = []
 
-   # print points.items()
-   # print "Match in {}".format(matchPoint)
-    mstr = "({}, {})".format(matchPoint.x, matchPoint.y)
-    if points.has_key(mstr):
-        l = points.get(mstr)
+    # create the processes
+    for i in range(cores):
+        w = Process(name='worker_'+str(i+1), target=client_func, args=(E, P, Q))
+        workers.append(w)
+        w.start()
 
-    if (coefficients[1] == l[1]):
-        raise ArithmeticError("Undefined value")
+    server.start()
+    server.join() # wait server end
 
-    f = l[0] - coefficients[0]
-    g = invmod(coefficients[1]-l[1], n)
-    ret = (f * g) % n
-    return (ret + n) % n
+    # kill the processes
+    for w in workers:
+        w.terminate()
+
+    # empty lists
+    del c[:], d[:], R[:], workers[:]
+
+    x = return_dict[0]
+    return x
 
 def __H(P, L):
     return P.x % L
-
-def __isDistinguished(E, P, L):
-    f = E.field
-    limit = f // L
-    return P.y < limit
