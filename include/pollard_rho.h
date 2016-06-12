@@ -12,7 +12,7 @@ namespace PollardRho
 {
     BigInt original(EllipticCurve &E, const Point &P, const Point &Q) throw();
     BigInt serial(EllipticCurve &E, const Point &P, const Point &Q) throw();
-    BigInt parallelized(EllipticCurve &E, const Point &P, const Point &Q) throw();
+    BigInt parallel(EllipticCurve &E, const Point &P, const Point &Q) throw();
 }
 
 #endif

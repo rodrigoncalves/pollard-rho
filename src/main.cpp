@@ -2,15 +2,27 @@
 #include "elliptic_curve.h"
 #include "pollard_rho.h"
 #include <time.h>
+#include <string>
 
 using namespace std;
 using namespace PollardRho;
 
-int main()
+int main(int argc, char **argv)
 {
-    int p, A, B;
-    BigInt x, y=15;
     srand(time(NULL));
+
+    BigInt p, A, B, order, Px, Py, Qx, Qy;
+    BigInt x;
+
+    int nbits = stoi(argv[1]);
+    A = argv[2];
+    B = argv[3];
+    p = argv[4];
+    order = argv[5];
+    Px = argv[6]; 
+    Py = argv[7]; 
+    Qx = argv[8]; 
+    Qy = argv[9]; 
 
     // p = 47; A = 34; B = 10;
     // EllipticCurve E(p, A, B);
@@ -22,10 +34,14 @@ int main()
     // Point P = E.point(5, 116);
     // Point Q = E.point(155, 166);
 
-    p = 7919; A = 1001; B = 75;
-    EllipticCurve E(p, A, B);
-    Point P = E.point(4023, 6036);
-    Point Q = E.point(4135, 3169);
+    // p = 7919; A = 1001; B = 75;
+    // EllipticCurve E(p, A, B);
+    // Point P = E.point(4023, 6036);
+    // Point Q = E.point(4135, 3169);
+
+    EllipticCurve E(p, A, B, order);
+    Point P = E.point(Px, Py);
+    Point Q = E.point(Qx, Qy);
 
     try
     {

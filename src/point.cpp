@@ -118,11 +118,24 @@ Point::operator-() const { return Point(m_curve, m_x, -m_y); }
 Point
 Point::operator*(const BigInt &n) const
 {
-    Point P = *this;
-    for (BigInt i=0; i<n-1; i++)
+    BigInt m = n;
+    Point Q = *this;
+    Point R;
+
+    if (m % 2 == 1) { R = *this; }
+
+    //m >>= 1;
+    m /= 2;
+    while(m > 0)
     {
-        P += *this;
+        Q += Q;
+        if (m % 2 == 1)
+        {
+            R = R.m_curve != nullptr? R + Q : Q;
+        }
+        // m >>= 1;
+        m /= 2;
     }
 
-    return P;
+    return R;
 }

@@ -13,18 +13,20 @@
 class EllipticCurve
 {
 public:
-    EllipticCurve(const BigInt &field, const BigInt &A, const BigInt &B);
+    EllipticCurve(const BigInt &field, const BigInt &A, const BigInt &B, \
+                  const BigInt &order);
 
     BigInt field() const;
     BigInt A() const;
     BigInt B() const;
     Point point(const BigInt &x, const BigInt &y);
-    BigInt order();
+    BigInt order() const;
 
 private:
     BigInt m_field;
     BigInt m_A;
     BigInt m_B;
+    BigInt m_order;
 };
 
 #endif
