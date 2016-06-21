@@ -29,7 +29,6 @@ def format_time(time):
     minute = 60
     hour = 60*minute
     day = 24*hour
-
     d = int(time//day)
     h = int(time - d*day)//hour
     m = int(time - d*day - h*hour)//minute
