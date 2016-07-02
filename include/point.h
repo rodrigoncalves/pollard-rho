@@ -18,6 +18,7 @@ public:
     bool isInfinite() const;
     BigInt x() const;
     BigInt y() const;
+    std::string str() const;
 
     bool operator==(const Point &other) const;
     bool operator!=(const Point &other) const;

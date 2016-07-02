@@ -8,18 +8,18 @@
 #include <stdexcept>
 #include "elliptic_curve.h"
 
-EllipticCurve::EllipticCurve(const BigInt &field, const BigInt &A, \
-                             const BigInt &B, const BigInt &order)
+EllipticCurve::EllipticCurve(const BigInt &A, const BigInt &B, \
+							 const BigInt &field, const BigInt &order)
     : m_field(field), m_A(A), m_B(B), m_order(order) {}
-
-BigInt
-EllipticCurve::field() const { return m_field; }
 
 BigInt
 EllipticCurve::A() const { return m_A; }
 
 BigInt
 EllipticCurve::B() const { return m_B; }
+
+BigInt
+EllipticCurve::field() const { return m_field; }
 
 BigInt
 EllipticCurve::order() const { return m_order; }

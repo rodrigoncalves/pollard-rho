@@ -30,3 +30,4 @@
 # Others
 bin/
 obj/
+*.csv

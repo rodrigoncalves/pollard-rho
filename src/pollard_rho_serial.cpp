@@ -13,8 +13,7 @@
 #include "pollard_rho.h"
 
 // #define DEBUG
-
-BigInt H(Point&, BigInt&);
+using namespace std;
 
 BigInt
 PollardRho::serial(EllipticCurve &E, const Point &P, const Point &Q) throw()
@@ -22,8 +21,8 @@ PollardRho::serial(EllipticCurve &E, const Point &P, const Point &Q) throw()
     BigInt L(4), k;
     BigInt an, bn;
     BigInt am, bm;
-    std::vector<BigInt> c, d;
-    std::vector<Point> R;
+    vector<BigInt> c, d;
+    vector<Point> R;
 
     k = E.order();
 
@@ -49,10 +48,10 @@ PollardRho::serial(EllipticCurve &E, const Point &P, const Point &Q) throw()
         bn += d[i];
 
         #ifdef DEBUG
-            std::cout << "i = " << i << "\n";
-            std::cout << "Xn = (" << Xn.x() << ", " << Xn.y() <<")" << "\n";
-            std::cout << "an = " << an << "\n";
-            std::cout << "bn = " << bn << "\n";
+            cout << "i = " << i << "\n";
+            cout << "Xn = (" << Xn.x() << ", " << Xn.y() <<")" << "\n";
+            cout << "an = " << an << "\n";
+            cout << "bn = " << bn << "\n";
         #endif
 
         for (int j = 0; j < 2; j++)
@@ -66,7 +65,7 @@ PollardRho::serial(EllipticCurve &E, const Point &P, const Point &Q) throw()
 
     if (bn == bm)
     {
-        throw std::domain_error("Indefined value");
+        throw domain_error("Indefined value");
     }
 
     BigInt f = an-am;

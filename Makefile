@@ -3,7 +3,6 @@ OBJ_DIR = obj
 BIN_DIR = bin
 
 CC = g++
-
 CFLAGS = -W -Wall -pedantic -ansi -std=c++11 -MMD -g3
 INCLUDES = -Iinclude
 LIBS = -lntl -lgmp -lgmpxx
@@ -12,7 +11,7 @@ TARGET = bin/pollardrho
 TARGET_MAIN = $(SRC_DIR)/*.cpp
 
 SRC = ${wildcard $(SRC_DIR)/*.cpp}
-OBJ = ${addprefix $(OBJ_DIR)/, ${notdir ${SRC:.cpp=.o}}} 
+OBJ = ${addprefix $(OBJ_DIR)/, ${notdir ${SRC:.cpp=.o}}}
 
 .PHONY: clean depend
 

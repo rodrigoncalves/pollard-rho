@@ -158,6 +158,13 @@ BigInt::get_str() const
     return m_value.get_str(m_conversionBase);
 }
 
+BigInt
+BigInt::popcount() const
+{
+    mp_bitcnt_t count = mpz_popcount(m_value.get_mpz_t());
+    return BigInt(count);
+}
+
 /* Assignments */
 BigInt& BigInt::operator=(const std::string &value)
 {

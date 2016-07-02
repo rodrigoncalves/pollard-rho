@@ -16,11 +16,11 @@ public:
     EllipticCurve(const BigInt &field, const BigInt &A, const BigInt &B, \
                   const BigInt &order);
 
-    BigInt field() const;
     BigInt A() const;
     BigInt B() const;
-    Point point(const BigInt &x, const BigInt &y);
+    BigInt field() const;
     BigInt order() const;
+    Point point(const BigInt &x, const BigInt &y);
 
 private:
     BigInt m_field;

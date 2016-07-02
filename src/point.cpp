@@ -5,6 +5,7 @@
  * Date: 29/10/2015
  * License: LGPL. No copyright.
  */
+#include <string>
 #include "point.h"
 #include "elliptic_curve.h"
 
@@ -15,6 +16,9 @@ Point::Point(EllipticCurve *curve, const BigInt x, const BigInt y)
 
 bool
 Point::isInfinite() const { return false; }
+
+std::string
+Point::str() const { return std::string("{"+m_x.get_str()+"}, {"+m_y.get_str()+"}"); }
 
 BigInt
 Point::x() const { return m_x; }
