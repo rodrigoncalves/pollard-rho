@@ -23,8 +23,8 @@ def client_func(E, P, Q):
 
         i = __H(X, L)
         X += R[i]
-        a += c[i]
-        b += d[i]
+        a += c[i] % n
+        b += d[i] % n
 
 def sendToServer(arg):
     client_pipe.send(arg)

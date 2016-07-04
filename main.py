@@ -50,7 +50,7 @@ def main(args):
             +str(now.hour)+':'+str(now.minute)+':'+str(now.second)
             print 'Started at', moment
 
-            x = parallelized(E, P, Q)
+            x = multiprocess(E, P, Q)
 
             print 'x =', x
             break
