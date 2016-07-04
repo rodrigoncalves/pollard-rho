@@ -34,16 +34,14 @@ int main(int argc, char **argv)
     Point P = E.point(Px, Py);
     Point Q = E.point(Qx, Qy);
 
-    // cout << "nbits = " << nbits << "\n";
-    // cout << "E = (A: " << A << ", B: " << B << ", p: " << p << ", order: " \
-    //      << order << ")\n";
-    // cout << "P = (" << P.x() << ", " << P.y() << ")\n";
-    // cout << "Q = (" << Q.x() << ", " << Q.y() << ")\n";
+    cout << "nbits = " << nbits << "\n";
+    cout << "E = (A: " << A << ", B: " << B << ", p: " << p << ", order: " \
+         << order << ")\n";
+    cout << "P = (" << P.x() << ", " << P.y() << ")\n";
+    cout << "Q = (" << Q.x() << ", " << Q.y() << ")\n";
 
     try
     {
-        // x = original(E, P, Q);
-        // x = serial(E, P, Q);
         x = parallel(E, P, Q);
         cout << "x = " << x << endl;
     }

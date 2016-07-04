@@ -57,7 +57,6 @@ void worker_func(Params params)
             sendToServer(E.order());
             sendToServer(X.x());
             sendToServer(X.y());
-            break;
         }
 
         int i = H(X, L).get_ui();
@@ -97,52 +96,40 @@ BigInt server_func(const BigInt &k)
         BigInt x = recvFromWorker();
         BigInt y = recvFromWorker();
 
-        // int size=0;
-        // read(fd[0], &size, sizeof(int));
-        // void *buf = malloc(size);
-        // read(fd[0], buf, sizeof(BigInt));
-        // char *_a = (char*)buf;
-        // BigInt a(_a);
+        EllipticCurve E(A, B, field, order);
+        Point P = E.point(x, y);
 
-        // BigInt a(_a), b(_b), x(_x), y(_y);
-        // BigInt A(_A), B(_B), field(_field), order(_order);
+        auto it = triples.find(P.str());
+        if (it != triples.end())
+        {
+            // auto v = it->second;
+            triple_collided = Args(a, b, P);
+            break;
+        }
 
-        // EllipticCurve E(A, B, field, order);
-        // Point P = E.point(x, y);
-
-        // auto it = triples.find(P.str());
-        // if (it != triples.end())
-        // {
-        //     // auto v = it->second;
-        //     triple_collided = Args(a, b, P);
-        //     break;
-        // }
-
-        // vector<BigInt> v;
-        // v.push_back(a);
-        // v.push_back(b);
-        // triples[P.str()] = v;
-        // delete args;
+        vector<BigInt> v;
+        v.push_back(a);
+        v.push_back(b);
+        triples[P.str()] = v;
+        triples.size();
     }
 
-    // BigInt am = *triple_collided->a;
-    // BigInt bm = *triple_collided->b;
-    // string P = triple_collided->P->str();
-    // BigInt an = triples[P][0];
-    // BigInt bn = triples[P][1];
-    // delete triple_collided;
+    BigInt am = triple_collided.a;
+    BigInt bm = triple_collided.b;
+    string P = triple_collided.P.str();
+    BigInt an = triples[P][0];
+    BigInt bn = triples[P][1];
 
-    // if (bn == bm)
-    // {
-    //     throw domain_error("Indefined value");
-    // }
+    if (bn == bm)
+    {
+        throw domain_error("Indefined value");
+    }
 
-    // BigInt f = an-am;
-    // BigInt g = (bm-bn).invMod(k);
-    // BigInt ret = (f * g) % k;
-    // BigInt x = (ret + k) % k;
-    // return x;
-    return BigInt();
+    BigInt f = an-am;
+    BigInt g = (bm-bn).invMod(k);
+    BigInt ret = (f * g) % k;
+    BigInt x = (ret + k) % k;
+    return x;
 }
 
 void kill_processes()
@@ -181,16 +168,14 @@ PollardRho::parallel(EllipticCurve &E, Point &P, Point &Q) throw()
         R.push_back(P*c.back() + Q*d.back());
     }
 
-    // Creating processes
-    int cores = sysconf(_SC_NPROCESSORS_ONLN);
-
     if (pipe(fd) < 0)
     {
         cout << "Pipe failed\n";
         exit(-1);
     }
 
-
+    // Creating processes
+    int cores = sysconf(_SC_NPROCESSORS_ONLN);
     if (fork() == 0)
     {
         cores = 1;
