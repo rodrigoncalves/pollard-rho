@@ -9,6 +9,7 @@
 #include <map>
 #include <vector>
 #include <signal.h>
+#include <sys/prctl.h>
 #include <sys/wait.h>
 #include <unistd.h>
 #include "bigint.h"
@@ -20,11 +21,12 @@ using namespace std;
 
 bool isDistinguished(const Point&);
 BigInt popcount(const BigInt&);
+void quit(int);
 
 BigInt L(64);
 vector<BigInt> c, d;
 vector<Point> R;
-vector<int> pids;
+vector<pid_t> pids;
 int fd[2]; // Pipe
 
 void sendToServer(const BigInt &num)
@@ -81,10 +83,8 @@ BigInt server_func(const BigInt &k)
     map<string, vector<BigInt>> triples;
     Args triple_collided;
 
-    // cout << "Server PID: " << getpid() << endl;
     while (1)
     {
-        // string _a, _b, _x, _y;
         string _A, _B, _field, _order;
 
         BigInt a = recvFromWorker();
@@ -102,7 +102,6 @@ BigInt server_func(const BigInt &k)
         auto it = triples.find(P.str());
         if (it != triples.end())
         {
-            // auto v = it->second;
             triple_collided = Args(a, b, P);
             break;
         }
@@ -136,7 +135,7 @@ void kill_processes()
 {
     for (unsigned int i = 0; i < pids.size(); i++)
     {
-        kill(pids[i], SIGKILL);
+        kill(pids[i], SIGINT);
     }
 }
 
@@ -144,12 +143,14 @@ void spawn(int workers, Params params)
 {
     for (int i = 0; i < workers; i++)
     {
-        if (fork() == 0)
+        pid_t pid;
+        if ((pid = fork()) == 0)
         {
-            pids.push_back(getpid());
             worker_func(params);
             exit(0);
         }
+
+        pids.push_back(pid);
     }
 }
 
@@ -176,16 +177,27 @@ PollardRho::parallel(EllipticCurve &E, Point &P, Point &Q) throw()
 
     // Creating processes
     int cores = sysconf(_SC_NPROCESSORS_ONLN);
-    if (fork() == 0)
+    pid_t pid;
+    if ((pid = fork()) == 0)
     {
-        cores = 1;
+        signal(SIGINT, quit);
         spawn(cores, Params(E, P, Q));
+        wait(NULL);
         exit(0);
     }
 
-    BigInt x = server_func(k);
-    // join?
-    kill_processes();
+    pids.push_back(pid);
+
+    signal(SIGINT, quit);
+    prctl(PR_SET_PDEATHSIG,SIGHUP);
+
+    BigInt x;
+    try {
+        x = server_func(k);
+    } catch (std::exception &e) {
+        kill_processes();
+        throw e;
+    }
 
     return x;
 }
@@ -193,5 +205,11 @@ PollardRho::parallel(EllipticCurve &E, Point &P, Point &Q) throw()
 bool isDistinguished(const Point &P)
 {
     BigInt x = P.x();
-    return x.popcount() < 20;
+    return x.popcount() < 24;
+}
+
+void quit(int)
+{
+    kill_processes();
+    exit(0);
 }
