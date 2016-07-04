@@ -29,12 +29,19 @@ vector<Point> R;
 vector<pid_t> pids;
 int fd[2]; // Pipe
 
-void sendToServer(const BigInt &num)
+void sendToServer(const BigInt &a, const BigInt &b, const Point &P)
 {
-    const char *str = num.c_str();
-    int len = strlen(str) + 1;
-    write(fd[1], &len, sizeof(int));
-    write(fd[1], str, len);
+    pipe_arg arg;
+    memset(&arg, 0, sizeof(arg));
+    strcpy(arg.a, a.c_str());
+    strcpy(arg.b, b.c_str());
+    strcpy(arg.x, P.x().c_str());
+    strcpy(arg.y, P.y().c_str());
+    arg.a_size = strlen(arg.a) + 1;
+    arg.b_size = strlen(arg.b) + 1;
+    arg.x_size = strlen(arg.x) + 1;
+    arg.y_size = strlen(arg.y) + 1;
+    write(fd[1], &arg, sizeof(arg));
 }
 
 void worker_func(Params params)
@@ -51,14 +58,7 @@ void worker_func(Params params)
     while (1)
     {
         if (isDistinguished(X)) {
-            sendToServer(a);
-            sendToServer(b);
-            sendToServer(E.A());
-            sendToServer(E.B());
-            sendToServer(E.field());
-            sendToServer(E.order());
-            sendToServer(X.x());
-            sendToServer(X.y());
+            sendToServer(a, b, X);
         }
 
         int i = H(X, L).get_ui();
@@ -68,34 +68,22 @@ void worker_func(Params params)
     }
 }
 
-BigInt recvFromWorker()
-{
-    int size = 0;
-    read(fd[0], &size, sizeof(int));
-    if (size > 100) size = 100;
-    char *str = (char*) calloc(size, 1);
-    read(fd[0], str, size);
-    return BigInt(string(str));
-}
-
-BigInt server_func(const BigInt &k)
+BigInt server_func(Params params, const BigInt &k)
 {
     map<string, vector<BigInt>> triples;
     Args triple_collided;
 
     while (1)
     {
-        BigInt a, b, A, B, field, order, x, y;
-        a = recvFromWorker();
-        b = recvFromWorker();
-        A = recvFromWorker();
-        B = recvFromWorker();
-        field = recvFromWorker();
-        order = recvFromWorker();
-        x = recvFromWorker();
-        y = recvFromWorker();
+        pipe_arg arg;
+        read(fd[0], &arg, sizeof(arg));
 
-        EllipticCurve E(A, B, field, order);
+        BigInt a(arg.a);
+        BigInt b(arg.b);
+        BigInt x(arg.x);
+        BigInt y(arg.y);
+
+        EllipticCurve E = *params.E;
         Point P = E.point(x, y);
 
         auto it = triples.find(P.str());
@@ -192,7 +180,7 @@ PollardRho::parallel(EllipticCurve &E, Point &P, Point &Q) throw()
 
     BigInt x;
     try {
-        x = server_func(k);
+        x = server_func(Params(E, P, Q), k);
     } catch (std::exception &e) {
         kill_processes();
         cerr << e.what() << endl;
