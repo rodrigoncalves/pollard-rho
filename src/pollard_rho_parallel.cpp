@@ -199,6 +199,8 @@ PollardRho::parallel(EllipticCurve &E, Point &P, Point &Q) throw()
         cerr << e.what() << endl;
     }
 
+    kill_processes();
+
     return x;
 }
 

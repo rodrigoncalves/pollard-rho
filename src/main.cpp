@@ -9,8 +9,6 @@ using namespace PollardRho;
 
 int main(int argc, char **argv)
 {
-    srand(time(NULL));
-
     BigInt p, A, B, order, Px, Py, Qx, Qy;
     BigInt x;
     int nbits;
