@@ -40,14 +40,16 @@ int main(int argc, char **argv)
     cout << "P = (" << P.x() << ", " << P.y() << ")\n";
     cout << "Q = (" << Q.x() << ", " << Q.y() << ")\n";
 
-    try
+    while (1)
     {
-        x = parallel(E, P, Q);
-        cout << "x = " << x << endl;
-    }
-    catch (std::exception &e)
-    {
-        cerr << e.what() << endl;
+        try {
+            x = parallel(E, P, Q);
+            if (x == 0) continue;
+            cout << "x = " << x << endl;
+            break;
+        } catch (std::exception &e) {
+            cerr << e.what() << endl;
+        }
     }
 
     return 0;

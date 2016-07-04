@@ -196,7 +196,7 @@ PollardRho::parallel(EllipticCurve &E, Point &P, Point &Q) throw()
         x = server_func(k);
     } catch (std::exception &e) {
         kill_processes();
-        throw e;
+        cerr << e.what() << endl;
     }
 
     return x;
