@@ -63,8 +63,8 @@ void worker_func(Params params)
 
         int i = H(X, L).get_ui();
         X += R[i];
-        a += c[i];
-        b += d[i];
+        a += c[i] % k;
+        b += d[i] % k;
     }
 }
 
