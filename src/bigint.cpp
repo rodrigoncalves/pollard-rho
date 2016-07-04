@@ -39,8 +39,13 @@ BigInt::BigInt(const int &value)
     m_value = mpz_class(value);
 }
 
-BigInt::BigInt(const std::string &value, const int &base){
-    m_value = mpz_class(value, base);
+BigInt::BigInt(const std::string &value, const int &base)
+{
+    mpz_t rop;
+    mpz_init(rop);
+    mpz_set_str(rop, value.c_str(), base);
+    *this = BigInt(rop);
+    mpz_clear(rop);
 }
 
 BigInt

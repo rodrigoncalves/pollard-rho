@@ -75,7 +75,7 @@ BigInt recvFromWorker()
     if (size > 100) size = 100;
     char *str = (char*) calloc(size, 1);
     read(fd[0], str, size);
-    return BigInt(str);
+    return BigInt(string(str));
 }
 
 BigInt server_func(const BigInt &k)
@@ -85,16 +85,15 @@ BigInt server_func(const BigInt &k)
 
     while (1)
     {
-        string _A, _B, _field, _order;
-
-        BigInt a = recvFromWorker();
-        BigInt b = recvFromWorker();
-        BigInt A = recvFromWorker();
-        BigInt B = recvFromWorker();
-        BigInt field = recvFromWorker();
-        BigInt order = recvFromWorker();
-        BigInt x = recvFromWorker();
-        BigInt y = recvFromWorker();
+        BigInt a, b, A, B, field, order, x, y;
+        a = recvFromWorker();
+        b = recvFromWorker();
+        A = recvFromWorker();
+        B = recvFromWorker();
+        field = recvFromWorker();
+        order = recvFromWorker();
+        x = recvFromWorker();
+        y = recvFromWorker();
 
         EllipticCurve E(A, B, field, order);
         Point P = E.point(x, y);
