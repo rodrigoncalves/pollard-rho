@@ -39,6 +39,10 @@ BigInt::BigInt(const int &value)
     m_value = mpz_class(value);
 }
 
+BigInt::BigInt(const std::string &value, const int &base){
+    m_value = mpz_class(value, base);
+}
+
 BigInt
 BigInt::power(const BigInt &e) const
 {
@@ -156,6 +160,12 @@ std::string
 BigInt::get_str() const
 {
     return m_value.get_str(m_conversionBase);
+}
+
+const char *
+BigInt::c_str() const
+{
+    return this->get_str().c_str();
 }
 
 BigInt

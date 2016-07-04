@@ -29,7 +29,6 @@ public:
 
     friend class EllipticCurve;
 
-protected:
     Point();
 
 private:

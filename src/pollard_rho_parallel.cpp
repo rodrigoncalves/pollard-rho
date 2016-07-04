@@ -8,8 +8,9 @@
 #include <iostream>
 #include <map>
 #include <vector>
-#include <unistd.h>
 #include <signal.h>
+#include <sys/wait.h>
+#include <unistd.h>
 #include "bigint.h"
 #include "elliptic_curve.h"
 #include "point.h"
@@ -19,13 +20,20 @@ using namespace std;
 
 bool isDistinguished(const Point&);
 BigInt popcount(const BigInt&);
-void sendToServer(Args*);
 
 BigInt L(64);
 vector<BigInt> c, d;
 vector<Point> R;
 vector<int> pids;
 int fd[2]; // Pipe
+
+void sendToServer(const BigInt &num)
+{
+    const char *str = num.c_str();
+    int len = strlen(str) + 1;
+    write(fd[1], &len, sizeof(int));
+    write(fd[1], str, len);
+}
 
 void worker_func(Params params)
 {
@@ -41,8 +49,15 @@ void worker_func(Params params)
     while (1)
     {
         if (isDistinguished(X)) {
-            Args *args = new Args(a, b, X);
-            sendToServer(args);
+            sendToServer(a);
+            sendToServer(b);
+            sendToServer(E.A());
+            sendToServer(E.B());
+            sendToServer(E.field());
+            sendToServer(E.order());
+            sendToServer(X.x());
+            sendToServer(X.y());
+            break;
         }
 
         int i = H(X, L).get_ui();
@@ -52,53 +67,82 @@ void worker_func(Params params)
     }
 }
 
+BigInt recvFromWorker()
+{
+    int size = 0;
+    read(fd[0], &size, sizeof(int));
+    if (size > 100) size = 100;
+    char *str = (char*) calloc(size, 1);
+    read(fd[0], str, size);
+    return BigInt(str);
+}
+
 BigInt server_func(const BigInt &k)
 {
     map<string, vector<BigInt>> triples;
-    Args* triple_collided = nullptr;
+    Args triple_collided;
 
+    // cout << "Server PID: " << getpid() << endl;
     while (1)
     {
-        Args *args = new Args();
-        read(fd[1], args, sizeof(args));
-        auto a = args->a;
-        auto b = args->b;
-        auto P = args->P;
+        // string _a, _b, _x, _y;
+        string _A, _B, _field, _order;
 
-        auto it = triples.find(P->str());
-        if (it != triples.end())
-        {
-            auto v = it->second;
-            triple_collided = args;
-            break;
-        }
+        BigInt a = recvFromWorker();
+        BigInt b = recvFromWorker();
+        BigInt A = recvFromWorker();
+        BigInt B = recvFromWorker();
+        BigInt field = recvFromWorker();
+        BigInt order = recvFromWorker();
+        BigInt x = recvFromWorker();
+        BigInt y = recvFromWorker();
 
-        triples[P->str()] = vector<BigInt>(a, b);
-        delete args;
+        // int size=0;
+        // read(fd[0], &size, sizeof(int));
+        // void *buf = malloc(size);
+        // read(fd[0], buf, sizeof(BigInt));
+        // char *_a = (char*)buf;
+        // BigInt a(_a);
+
+        // BigInt a(_a), b(_b), x(_x), y(_y);
+        // BigInt A(_A), B(_B), field(_field), order(_order);
+
+        // EllipticCurve E(A, B, field, order);
+        // Point P = E.point(x, y);
+
+        // auto it = triples.find(P.str());
+        // if (it != triples.end())
+        // {
+        //     // auto v = it->second;
+        //     triple_collided = Args(a, b, P);
+        //     break;
+        // }
+
+        // vector<BigInt> v;
+        // v.push_back(a);
+        // v.push_back(b);
+        // triples[P.str()] = v;
+        // delete args;
     }
 
-    BigInt am = *triple_collided->a;
-    BigInt bm = *triple_collided->b;
-    string P = triple_collided->P->str();
-    BigInt an = triples[P][0];
-    BigInt bn = triples[P][1];
-    delete triple_collided;
+    // BigInt am = *triple_collided->a;
+    // BigInt bm = *triple_collided->b;
+    // string P = triple_collided->P->str();
+    // BigInt an = triples[P][0];
+    // BigInt bn = triples[P][1];
+    // delete triple_collided;
 
-    if (bn == bm)
-    {
-        throw domain_error("Indefined value");
-    }
+    // if (bn == bm)
+    // {
+    //     throw domain_error("Indefined value");
+    // }
 
-    BigInt f = an-am;
-    BigInt g = (bm-bn).invMod(k);
-    BigInt ret = (f * g) % k;
-    BigInt x = (ret + k) % k;
-    return x;
-}
-
-void sendToServer(Args *args)
-{
-    write(fd[0], (void*)args, sizeof(args));
+    // BigInt f = an-am;
+    // BigInt g = (bm-bn).invMod(k);
+    // BigInt ret = (f * g) % k;
+    // BigInt x = (ret + k) % k;
+    // return x;
+    return BigInt();
 }
 
 void kill_processes()
@@ -111,12 +155,6 @@ void kill_processes()
 
 void spawn(int workers, Params params)
 {
-    if (pipe(fd))
-    {
-        cout << "Pipe failed\n";
-        exit(-1);
-    }
-
     for (int i = 0; i < workers; i++)
     {
         if (fork() == 0)
@@ -145,7 +183,21 @@ PollardRho::parallel(EllipticCurve &E, Point &P, Point &Q) throw()
 
     // Creating processes
     int cores = sysconf(_SC_NPROCESSORS_ONLN);
-    spawn(cores, Params(E, P, Q));
+
+    if (pipe(fd) < 0)
+    {
+        cout << "Pipe failed\n";
+        exit(-1);
+    }
+
+
+    if (fork() == 0)
+    {
+        cores = 1;
+        spawn(cores, Params(E, P, Q));
+        exit(0);
+    }
+
     BigInt x = server_func(k);
     // join?
     kill_processes();
@@ -156,5 +208,5 @@ PollardRho::parallel(EllipticCurve &E, Point &P, Point &Q) throw()
 bool isDistinguished(const Point &P)
 {
     BigInt x = P.x();
-    return x.popcount() < 24;
+    return x.popcount() < 20;
 }

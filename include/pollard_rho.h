@@ -31,12 +31,12 @@ public:
 class Args
 {
 public:
-    BigInt *a; BigInt *b; Point *P;
+    BigInt a; BigInt b; Point P;
 
-    Args() : a(0), b(0), P(0) {}
+    Args() {}
 
-    Args(BigInt &_a, BigInt &_b, Point &_P)
-        : a(&_a), b(&_b), P(&_P) {}
+    Args(BigInt _a, BigInt _b, Point _P)
+        : a(_a), b(_b), P(_P) {}
 };
 
 #endif

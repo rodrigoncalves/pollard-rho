@@ -22,6 +22,7 @@ public:
     BigInt(const mpz_t &value);
     BigInt(const BigInt &value);
     BigInt(const int &value);
+    BigInt(const std::string &value, const int &base = BigInt::m_conversionBase);
 
     BigInt power(const BigInt &e) const;
     BigInt power(const unsigned long int &e) const;
@@ -35,6 +36,7 @@ public:
     unsigned long int get_ui() const throw();
     signed long int get_si() const throw();
     std::string get_str() const;
+    const char *c_str() const;
     BigInt popcount() const;
 
     BigInt& operator=(const std::string &value);
