@@ -29,8 +29,12 @@ def format_time(time):
     minute = 60
     hour = 60*minute
     day = 24*hour
-    d = int(time//day)
-    h = int(time - d*day)//hour
-    m = int(time - d*day - h*hour)//minute
-    s = int(time - d*day - h*hour - m*minute)
-    return '%dd %dh %dm %ds' % (d, h, m , s)
+    month = 30*day
+    year = 12*month
+    y = int(time//year)
+    mo = int(time - y*year) // month
+    d = int(time - y*year - mo*month) // day
+    h = int(time - y*year - mo*month - d*day) // hour
+    mi = int(time - y*year - mo*month - d*day - h*hour) // minute
+    s = int(time - y*year - mo*month - d*day - h*hour - mi*minute)
+    return '%dy %dm %dd %dh %dm %ds' % (y, mo, d, h, mi, s)
