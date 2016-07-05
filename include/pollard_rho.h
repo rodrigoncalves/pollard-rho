@@ -41,10 +41,6 @@ public:
 
 struct pipe_arg
 {
-    int a_size;
-    int b_size;
-    int x_size;
-    int y_size;
     char a[50];
     char b[50];
     char x[50];

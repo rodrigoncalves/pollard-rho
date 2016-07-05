@@ -37,10 +37,6 @@ void sendToServer(const BigInt &a, const BigInt &b, const Point &P)
     strcpy(arg.b, b.c_str());
     strcpy(arg.x, P.x().c_str());
     strcpy(arg.y, P.y().c_str());
-    arg.a_size = strlen(arg.a) + 1;
-    arg.b_size = strlen(arg.b) + 1;
-    arg.x_size = strlen(arg.x) + 1;
-    arg.y_size = strlen(arg.y) + 1;
     write(fd[1], &arg, sizeof(arg));
 }
 
