@@ -18,7 +18,12 @@ int main(int argc, char **argv)
 
     if (argc >= 10)
     {
-        nbits = stoi(argv[1]);
+        try {
+            nbits = stoi(argv[1]);
+        } catch (...) {
+            return 0;
+        }
+
         A = argv[2]; B = argv[3]; p = argv[4]; order = argv[5];
         Px = argv[6]; Py = argv[7];
         Qx = argv[8]; Qy = argv[9];
@@ -59,6 +64,7 @@ int main(int argc, char **argv)
             if (P*x == Q) {
                 cout << "Correct!\n";
                 write_results(nbits, time);
+                cout << "\n------------------------\n";
                 break;
             } else {
                 cout << "Wrong!\n";
@@ -76,7 +82,7 @@ void write_results(int nbits, string &time)
     FILE *fp = fopen("results.txt", "a");
     char msg[50];
     memset(msg, 0, 50);
-    sprintf(msg, "Bits: %d\nTime execution: %s", nbits, time.c_str());
+    sprintf(msg, "Bits: %d\nTime execution: %s\n", nbits, time.c_str());
     fputs(msg, fp);
     fclose(fp);
 }
