@@ -8,6 +8,8 @@
 using namespace std;
 using namespace PollardRho;
 
+void write_results(int, string&);
+
 int main(int argc, char **argv)
 {
     BigInt p, A, B, order, Px, Py, Qx, Qy;
@@ -43,13 +45,21 @@ int main(int argc, char **argv)
     {
         try {
             clock_t start = clock();
+
             x = parallel(E, P, Q);
+
             clock_t end = clock();
+            string time = format_time(end-start);
+
             if (x == 0) continue;
+
             cout << "x = " << x << endl;
-            cout << "Time execution: " << format_time(end-start) << "\n";
+            cout << "Time execution: " << time << "\n";
+
             if (P*x == Q) {
-                cout << "Correct!\n"; break;
+                cout << "Correct!\n";
+                write_results(nbits, time);
+                break;
             } else {
                 cout << "Wrong!\n";
             }
@@ -59,4 +69,14 @@ int main(int argc, char **argv)
     }
 
     return 0;
+}
+
+void write_results(int nbits, string &time)
+{
+    FILE *fp = fopen("results.txt", "a");
+    char msg[50];
+    memset(msg, 0, 50);
+    sprintf(msg, "Bits: %d\nTime execution: %s", nbits, time.c_str());
+    fputs(msg, fp);
+    fclose(fp);
 }

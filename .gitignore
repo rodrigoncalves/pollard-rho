@@ -31,3 +31,4 @@
 bin/
 obj/
 *.csv
+*.txt
