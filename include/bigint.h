@@ -45,6 +45,13 @@ public:
     BigInt& operator=(const long &value);
     BigInt& operator=(const unsigned long &value);
 
+    /* Bitwise operators */
+    friend BigInt operator&(const BigInt &a, const BigInt &b);
+    friend BigInt operator>>(const BigInt &a, const BigInt &b);
+    friend BigInt operator<<(const BigInt &a, const BigInt &b);
+    friend BigInt& operator>>=(BigInt &a, const BigInt &b);
+    friend BigInt& operator<<=(BigInt &a, const BigInt &b);
+
     friend bool operator==(const BigInt &a, const BigInt &b);
     friend bool operator==(const BigInt &a, const long int &b);
     friend bool operator!=(const BigInt &a, const BigInt &b);

@@ -212,6 +212,30 @@ BigInt& BigInt::operator=(const unsigned long &value)
     return *this;
 }
 
+/* Bitwise */
+
+BigInt operator&(const BigInt &a, const BigInt &b)
+{
+    BigInt rop;
+    mpz_and(rop.m_value.get_mpz_t(), a.m_value.get_mpz_t(), b.m_value.get_mpz_t());
+    return rop;
+}
+BigInt operator>>(const BigInt &a, const BigInt &b)
+{
+    mpz_t rop;
+    mpz_init(rop);
+    mpz_div_2exp(rop, a.m_value.get_mpz_t(), b.get_ui());
+    BigInt ret(rop);
+    mpz_clear(rop);
+    return ret;
+}
+
+BigInt& operator>>=(BigInt &a, const BigInt &b)
+{
+    a = a >> b;
+    return a;
+}
+
 bool operator==(const BigInt &a, const BigInt &b)
 {
     int ret = mpz_cmp(a.m_value.get_mpz_t(), b.m_value.get_mpz_t());

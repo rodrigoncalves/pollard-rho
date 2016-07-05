@@ -7,6 +7,7 @@
  */
 #include <string>
 #include "point.h"
+#include "point_at_infinity.h"
 #include "elliptic_curve.h"
 
 Point::Point() : m_curve(nullptr), m_x(0), m_y(0) {}
@@ -17,6 +18,9 @@ Point::Point(EllipticCurve *curve, const BigInt x, const BigInt y)
 bool
 Point::isInfinite() const { return false; }
 
+EllipticCurve*
+Point::curve() const { return m_curve; }
+
 std::string
 Point::str() const { return std::string("{"+m_x.get_str()+"}, {"+m_y.get_str()+"}"); }
 
@@ -25,60 +29,6 @@ Point::x() const { return m_x; }
 
 BigInt
 Point::y() const { return m_y; }
-
-BigInt
-Point::lambda(const Point &P, const Point &Q) const
-{
-    BigInt a, b, d;
-    a = (Q.y() - P.y()) % m_curve->field();
-    if (a > m_curve->field())
-    {
-        a %= m_curve->field();
-    }
-
-    b = Q.x() - P.x();
-
-    BigInt aux;
-    a < 0 ? aux = -a : aux = a;
-    d = aux.gcd(b);
-
-    a /= d; b /= d;
-    a = (a + m_curve->field()) % m_curve->field();
-    if (a % b != 0)
-    {
-        b = b.invMod(m_curve->field());
-        return a * b % m_curve->field();
-    }
-
-    return a / b;
-}
-
-BigInt
-Point::lambda(const Point &P) const
-{
-    BigInt a, b, d;
-    a = (3*P.x()*P.x() + m_curve->A());
-    if (a > m_curve->field())
-    {
-        a %= m_curve->field();
-    }
-
-    b = 2*P.y();
-
-    BigInt aux;
-    a < 0 ? aux = -a : aux = a;
-    d = aux.gcd(b);
-
-    a /= d; b /= d;
-    a = (a + m_curve->field()) % m_curve->field();
-    if (a % b != 0)
-    {
-        b = b.invMod(m_curve->field());
-        return a * b % m_curve->field();
-    }
-
-    return a / b;
-}
 
 bool
 Point::operator==(const Point &other) const
@@ -101,6 +51,12 @@ Point::operator+=(const Point &other)
 Point
 Point::operator+(const Point &other) const
 {
+    if (other.isInfinite())
+        return other + *this;
+
+    if (*this != other and this->m_x == other.m_x)
+        return PointAtInfinity();
+
     Point R;
     BigInt delta;
 
@@ -126,20 +82,60 @@ Point::operator*(const BigInt &n) const
     Point Q = *this;
     Point R;
 
-    if (m % 2 == 1) { R = *this; }
+    if ((m & 1) == 1) { R = *this; }
 
-    //m >>= 1;
-    m /= 2;
-    while(m > 0)
+    m >>= 1;
+    while (m > 0)
     {
         Q += Q;
-        if (m % 2 == 1)
+        if ((m & 1) != 0)
         {
-            R = R.m_curve != nullptr? R + Q : Q;
+            R = (R.m_curve != nullptr) ? R + Q : Q;
         }
-        // m >>= 1;
-        m /= 2;
+        m >>= 1;
     }
 
     return R;
+}
+
+BigInt lambda(const Point &P, const Point &Q)
+{
+    BigInt a, b, d;
+    a = (Q.y() - P.y()) % P.curve()->field();
+    b = Q.x() - P.x();
+
+    BigInt aux;
+    a < 0 ? aux = -a : aux = a;
+    d = aux.gcd(b);
+
+    a /= d; b /= d;
+    a = (a + P.curve()->field()) % P.curve()->field();
+    if (a % b != 0)
+    {
+        b = b.invMod(P.curve()->field());
+        return a * b % P.curve()->field();
+    }
+
+    return a / b;
+}
+
+BigInt lambda(const Point &P)
+{
+    BigInt a, b, d;
+    a = (3*P.x()*P.x() + P.curve()->A());
+    b = 2*P.y();
+
+    BigInt aux;
+    a < 0 ? aux = -a : aux = a;
+    d = aux.gcd(b);
+
+    a /= d; b /= d;
+    a = (a + P.curve()->field()) % P.curve()->field();
+    if (a % b != 0)
+    {
+        b = b.invMod(P.curve()->field());
+        return a * b % P.curve()->field();
+    }
+
+    return a / b;
 }

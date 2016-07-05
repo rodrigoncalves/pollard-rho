@@ -16,6 +16,7 @@ class Point
 {
 public:
     bool isInfinite() const;
+    EllipticCurve *curve() const;
     BigInt x() const;
     BigInt y() const;
     std::string str() const;
@@ -38,8 +39,9 @@ private:
 
     Point(EllipticCurve *curve, const BigInt x, const BigInt y);
 
-    BigInt lambda(const Point &P, const Point &Q) const;
-    BigInt lambda(const Point &P) const;
 };
+
+BigInt lambda(const Point &P, const Point &Q);
+BigInt lambda(const Point &P);
 
 #endif
