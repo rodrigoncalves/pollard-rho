@@ -52,10 +52,14 @@ Point
 Point::operator+(const Point &other) const
 {
     if (other.isInfinite())
+    {
         return other + *this;
+    }
 
     if (*this != other and this->m_x == other.m_x)
+    {
         return PointAtInfinity();
+    }
 
     Point R;
     BigInt delta;

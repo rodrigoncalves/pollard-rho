@@ -53,7 +53,8 @@ void worker_func(Params params)
 
     while (1)
     {
-        if (isDistinguished(X)) {
+        if (isDistinguished(X))
+        {
             sendToServer(a, b, X);
         }
 
@@ -172,12 +173,14 @@ PollardRho::parallel(EllipticCurve &E, Point &P, Point &Q) throw()
     pids.push_back(pid);
 
     signal(SIGINT, quit);
-    prctl(PR_SET_PDEATHSIG,SIGHUP);
+    prctl(PR_SET_PDEATHSIG, SIGHUP);
 
     BigInt x;
-    try {
+    try
+    {
         x = server_func(Params(E, P, Q), k);
-    } catch (std::exception &e) {
+    } catch (std::exception &e)
+    {
         kill_processes();
         cerr << e.what() << endl;
     }

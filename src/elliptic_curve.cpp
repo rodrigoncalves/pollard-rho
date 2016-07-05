@@ -9,7 +9,7 @@
 #include "elliptic_curve.h"
 
 EllipticCurve::EllipticCurve(const BigInt &A, const BigInt &B, \
-							 const BigInt &field, const BigInt &order)
+                             const BigInt &field, const BigInt &order)
     : m_A(A), m_B(B), m_field(field), m_order(order) {}
 
 BigInt
