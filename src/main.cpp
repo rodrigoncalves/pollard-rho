@@ -1,8 +1,9 @@
 #include <iostream>
-#include "elliptic_curve.h"
-#include "pollard_rho.h"
 #include <time.h>
 #include <string>
+#include "elliptic_curve.h"
+#include "pollard_rho.h"
+#include "utils.h"
 
 using namespace std;
 using namespace PollardRho;
@@ -41,10 +42,17 @@ int main(int argc, char **argv)
     while (1)
     {
         try {
+            clock_t start = clock();
             x = parallel(E, P, Q);
+            clock_t end = clock();
             if (x == 0) continue;
             cout << "x = " << x << endl;
-            break;
+            cout << "Time execution: " << format_time(end-start) << "\n";
+            if (P*x == Q) {
+                cout << "Correct!\n"; break;
+            } else {
+                cout << "Wrong!\n";
+            }
         } catch (std::exception &e) {
             cerr << e.what() << endl;
         }
